@@ -9,13 +9,13 @@ import { Edit3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../context/GlobelContext";
 import Navbar from "../components/navbar";
-import { Toast } from 'primereact/toast';
+import { Toast } from "primereact/toast";
 
 export default function NewArticle() {
   const navigate = useNavigate();
-    const toastBC = useRef(null);
-  
-  const { setIsAuthUser, isAuthUser} = useContext(GlobalContext);
+  const toastBC = useRef(null);
+
+  const { setIsAuthUser, isAuthUser } = useContext(GlobalContext);
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState([]);
   const [adminTags, setAdminTags] = useState([]);
@@ -58,42 +58,42 @@ export default function NewArticle() {
   const validateForm = () => {
     if (!title.trim()) {
       toastBC.current.show({
-        severity: 'error',
+        severity: "error",
         summary: "Please enter an article title",
         sticky: true,
-    });
+      });
       return false;
     }
     if (!editorValue.trim()) {
       toastBC.current.show({
-        severity: 'error',
+        severity: "error",
         summary: "Please enter article content",
         sticky: true,
-    });
+      });
       return false;
     }
     if (!featuredImage) {
       toastBC.current.show({
-        severity: 'error',
+        severity: "error",
         summary: "Please upload a featured image",
         sticky: true,
-    });
+      });
       return false;
     }
     if (tags.length === 0) {
       toastBC.current.show({
-        severity: 'error',
+        severity: "error",
         summary: "Please select at least one tag",
         sticky: true,
-    });
+      });
       return false;
     }
     if (!agreedToTerms) {
       toastBC.current.show({
-        severity: 'error',
+        severity: "error",
         summary: "Please agree to the terms before publishing",
         sticky: true,
-    });
+      });
       return false;
     }
     return true;
@@ -104,10 +104,10 @@ export default function NewArticle() {
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
         toastBC.current.show({
-          severity: 'error',
+          severity: "error",
           summary: "Image size should be less than 5MB",
           sticky: true,
-      });
+        });
         return;
       }
       setFeaturedImage(file);
@@ -132,11 +132,11 @@ export default function NewArticle() {
         tags: JSON.stringify(tags),
         references,
         authorName: isAuthUser.firstname,
-        articleType: "admin"
+        articleType: "admin",
       };
 
       const articleResponse = await fetch(
-        "http://localhost:5000/api/articles",
+        "https://agya-new-main-umye.vercel.app/api/articles",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -155,7 +155,7 @@ export default function NewArticle() {
         formData.append("file", featuredImage);
 
         const imageResponse = await fetch(
-          `http://localhost:5000/api/uploads/articles/${newArticle._id}`,
+          `https://agya-new-main-umye.vercel.app/api/uploads/articles/${newArticle._id}`,
           {
             method: "POST",
             body: formData,
@@ -167,16 +167,16 @@ export default function NewArticle() {
         }
       }
       toastBC.current.show({
-        severity: 'success',
+        severity: "success",
         summary: "Article published successfully!",
         sticky: true,
-    });
+      });
     } catch (error) {
       toastBC.current.show({
-        severity: 'error',
-        summary:error.message || "Failed to publish article",
+        severity: "error",
+        summary: error.message || "Failed to publish article",
         sticky: true,
-    });
+      });
     } finally {
       setUploading(false);
     }
@@ -185,7 +185,7 @@ export default function NewArticle() {
   async function fetchTags() {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/tags/all",
+        "https://agya-new-main-umye.vercel.app/api/tags/all",
         {
           method: "GET",
           headers: {
@@ -217,10 +217,13 @@ export default function NewArticle() {
   const handleRemoveTag = (tag) => {
     setTags((prevTags) => prevTags.filter((t) => t !== tag));
   };
-  console.log(adminTags)
-  const filteredAdminTags = adminTags === undefined ? null: adminTags.filter((tag) =>
-    tag.name.toLowerCase().includes(searchText.toLowerCase())
-  );
+  console.log(adminTags);
+  const filteredAdminTags =
+    adminTags === undefined
+      ? null
+      : adminTags.filter((tag) =>
+          tag.name.toLowerCase().includes(searchText.toLowerCase())
+        );
 
   return (
     <div className="p-4 sm:px-12 lg:px-24">
@@ -295,8 +298,7 @@ export default function NewArticle() {
             </div>
 
             <div className="flex gap-[10px] mt-[10px] flex-wrap">
-              {
-              filteredAdminTags.map((tag) => (
+              {filteredAdminTags.map((tag) => (
                 <div
                   key={tag._id}
                   className="border border-solid py-[6px] px-[10px] border-main rounded-[5px] cursor-pointer"

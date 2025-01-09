@@ -16,13 +16,14 @@ export default function Activities() {
 
   useEffect(() => {
     try {
-      fetch("http://localhost:5000/api/activities/activities", {}).then(
-        (response) => {
-          response.json().then((data) => {
-            setActivityData(data.data);
-          });
-        }
-      );
+      fetch(
+        "https://agya-new-main-umye.vercel.app/api/activities/activities",
+        {}
+      ).then((response) => {
+        response.json().then((data) => {
+          setActivityData(data.data);
+        });
+      });
     } catch (e) {
       console.log(e);
     }
@@ -30,13 +31,14 @@ export default function Activities() {
 
   useEffect(() => {
     try {
-      fetch(`http://localhost:5000/api/activities/activities/${type}`, {}).then(
-        (response) => {
-          response.json().then((data) => {
-            setActivityDataType(data.data);
-          });
-        }
-      );
+      fetch(
+        `https://agya-new-main-umye.vercel.app/api/activities/activities/${type}`,
+        {}
+      ).then((response) => {
+        response.json().then((data) => {
+          setActivityDataType(data.data);
+        });
+      });
     } catch (e) {
       console.log(e);
     }
@@ -172,15 +174,23 @@ export default function Activities() {
                         <span>{activity?.appliedNumber}</span>
                       </div>
                       <div className="flex mt-2 items-center text-sm text-gray-500 space-x-2">
-                        {
-                       activity?.sponsors === undefined || activity.sponsors.length === 0? <div> no sponsors</div>:   activity?.sponsors.map((spons)=> {
+                        {activity?.sponsors === undefined ||
+                        activity.sponsors.length === 0 ? (
+                          <div> no sponsors</div>
+                        ) : (
+                          activity?.sponsors.map((spons) => {
                             return (
-                              <img key={spons?.name} src={spons?.logo} alt="" className="w-10" />
-                            )
+                              <img
+                                key={spons?.name}
+                                src={spons?.logo}
+                                alt=""
+                                className="w-10"
+                              />
+                            );
                           })
-                        }
+                        )}
                       </div>
-                      
+
                       <button className=" translate-x-[450px]  w-fit   py-2 px-8 rounded-xl  bg-main text-white">
                         {" "}
                         Details
@@ -190,7 +200,7 @@ export default function Activities() {
                           ""
                         ) : activity.status === "rejected" ? (
                           <>
-                            <Ban fillOpacity={20}className="text-[#F10F0F]"/>
+                            <Ban fillOpacity={20} className="text-[#F10F0F]" />
                             <p className=" text-[#F10F0F] text-lg">Rejected</p>
                           </>
                         ) : activity.status === "passed" ? (
@@ -228,7 +238,7 @@ export default function Activities() {
                     </h3>
                     <div className="flex items-center text-sm text-gray-500 space-x-2 my-2">
                       <span>
-                      {format(activity?.date, "P")} | {activity.time}
+                        {format(activity?.date, "P")} | {activity.time}
                       </span>
                     </div>
                     <div className="flex items-center text-sm text-gray-500 space-x-2 mb-2">
@@ -244,14 +254,22 @@ export default function Activities() {
                       <span>{activity?.appliedNumber}</span>
                     </div>
                     <div className="flex mt-2 items-center text-sm text-gray-500 space-x-2">
-                    {
-                       activity?.sponsors === undefined || activity.sponsors.length === 0? <div> no sponsors</div>:   activity?.sponsors.map((spons)=> {
-                            return (
-                              <img key={spons?.name} src={spons?.logo} alt="" className="w-10" />
-                            )
-                          })
-                        }
-                      </div>
+                      {activity?.sponsors === undefined ||
+                      activity.sponsors.length === 0 ? (
+                        <div> no sponsors</div>
+                      ) : (
+                        activity?.sponsors.map((spons) => {
+                          return (
+                            <img
+                              key={spons?.name}
+                              src={spons?.logo}
+                              alt=""
+                              className="w-10"
+                            />
+                          );
+                        })
+                      )}
+                    </div>
                     <button className="translate-x-[450px] py-2 px-8 rounded-xl bg-main text-white">
                       {" "}
                       Details

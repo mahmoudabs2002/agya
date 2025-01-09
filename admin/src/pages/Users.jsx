@@ -1,6 +1,6 @@
 import Navbar from "../components/navbar";
 import Sidebar from "../components/sidebar";
-import { Toast } from 'primereact/toast';
+import { Toast } from "primereact/toast";
 
 // import { dataset, valueFormatter } from "../assets/data";
 import Table from "@mui/material/Table";
@@ -15,8 +15,8 @@ import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 import { useEffect, useRef, useState } from "react";
 
 export default function Users() {
-  const [usersCount , setUsersCount] = useState()
-  const [usersData , setUserData] = useState([])
+  const [usersCount, setUsersCount] = useState();
+  const [usersData, setUserData] = useState([]);
   const toastBC = useRef(null);
 
   const settings = {
@@ -26,14 +26,15 @@ export default function Users() {
   };
   useEffect(() => {
     try {
-      fetch("http://localhost:5000/api/user/users", {
-      }).then((response) => {
-        response.json().then((data) => {
+      fetch("https://agya-new-main-umye.vercel.app/api/user/users", {}).then(
+        (response) => {
+          response.json().then((data) => {
             setUsersCount(data.numberOfUsers);
-            setUserData(data.data)
-        });
-      });
-    } catch (e) {
+            setUserData(data.data);
+          });
+        }
+      );
+    } catch (e) { 
       console.log(e);
     }
   }, []);
@@ -61,21 +62,21 @@ export default function Users() {
                   },
                 })}
               />
-            <div className=" flex justify-between gap-4">
-              {/* <div>
+              <div className=" flex justify-between gap-4">
+                {/* <div>
                 <h3>Vistors</h3>
                 <p className=" flex items-center text-black/50 gap-2">
                   <p className="bg-main  w-2 h-2 rounded-full"> </p> {usersCount}
                 </p>
               </div> */}
-              <div className=" mx-auto">
-                <h3>Registered</h3>
-                <p className=" flex items-center justify-center text-black/50 gap-2">
-                  <p className="bg-main  w-2 h-2 rounded-full"> </p> 
-                  <p>{usersCount}</p>
-                </p>
+                <div className=" mx-auto">
+                  <h3>Registered</h3>
+                  <p className=" flex items-center justify-center text-black/50 gap-2">
+                    <p className="bg-main  w-2 h-2 rounded-full"> </p>
+                    <p>{usersCount}</p>
+                  </p>
+                </div>
               </div>
-            </div>
             </div>
             <div className=" flex mt-40  border mr-8 border-main h-fit rounded-lg">
               <div className=" py-4 px-20 border-r  border-main">
@@ -97,33 +98,47 @@ export default function Users() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {
-                  usersData.map((user) => {
-                        return (
-                          <TableRow
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                          key={user._id}
-                        >
-                          <TableCell align="center"  width={50}>
-                              <span><img
-                              src={user.image || "https://via.placeholder.com/80"} // Replace with the actual image URL
+                  {usersData.map((user) => {
+                    return (
+                      <TableRow
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                        key={user._id}
+                      >
+                        <TableCell align="center" width={50}>
+                          <span>
+                            <img
+                              src={
+                                user.image || "https://via.placeholder.com/80"
+                              } // Replace with the actual image URL
                               alt="Profile"
                               className="w-8 h-8 rounded-full"
-                            /></span>
-                          </TableCell>
-                          <TableCell  align="center"><span className="text-black/50">{user.firstname}</span></TableCell>
-                          <TableCell  align="center"><span className="text-black/50">{user.academic_title}</span></TableCell>
-                          <TableCell  align="center"><span className="text-black/50">{user.affiliation}</span></TableCell>
-                        </TableRow>
-                        )
-                    }) 
-                  }
+                            />
+                          </span>
+                        </TableCell>
+                        <TableCell align="center">
+                          <span className="text-black/50">
+                            {user.firstname}
+                          </span>
+                        </TableCell>
+                        <TableCell align="center">
+                          <span className="text-black/50">
+                            {user.academic_title}
+                          </span>
+                        </TableCell>
+                        <TableCell align="center">
+                          <span className="text-black/50">
+                            {user.affiliation}
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </TableContainer>
-            <div className="flex">
-                
-            </div>
+            <div className="flex"></div>
           </div>
         </div>
       </div>

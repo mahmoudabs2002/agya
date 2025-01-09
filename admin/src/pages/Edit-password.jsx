@@ -1,18 +1,17 @@
+import { useState, useRef } from "react";
+import { Toast } from "primereact/toast";
 
-import { useState , useRef} from "react";
-import { Toast } from 'primereact/toast';
-
-import { useNavigate ,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function EditPassword() {
-    const navigate = useNavigate();
-    const toastBC = useRef(null);
-   const {id} = useParams()
+  const navigate = useNavigate();
+  const toastBC = useRef(null);
+  const { id } = useParams();
   const [newPassword, setNewPassword] = useState("");
   const ResetPassowrd = async (e) => {
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/auth/reset-password/${id}`,
+      `https://agya-new-main-umye.vercel.app/api/auth/reset-password/${id}`,
       {
         method: "POST",
         headers: {
@@ -25,20 +24,20 @@ export default function EditPassword() {
     );
     const finalData = await response.json();
     if (finalData.success) {
-        toastBC.current.show({
-            severity: 'success',
-            summary: finalData.message,
-            sticky: true,
-        });
+      toastBC.current.show({
+        severity: "success",
+        summary: finalData.message,
+        sticky: true,
+      });
       setTimeout(() => {
         window.location.href = `/`;
       }, 500);
     } else {
       toastBC.current.show({
-            severity: 'error',
-            summary: finalData.message,
-            sticky: true,
-        });
+        severity: "error",
+        summary: finalData.message,
+        sticky: true,
+      });
     }
   };
   return (
@@ -66,12 +65,12 @@ export default function EditPassword() {
               />
             </div>
             <button className=" text-white rounded-xl py-2 w-[280px] mt-4 hover:bg-main/80 duration-300 bg-main">
-                 Confirm 
+              Confirm
             </button>
           </form>
           <a
             className=" mt-4 block text-main cursor-pointer"
-            onClick={() => navigate("/") }
+            onClick={() => navigate("/")}
           >
             Return to Login Page →
           </a>

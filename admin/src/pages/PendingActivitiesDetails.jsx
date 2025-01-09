@@ -21,13 +21,14 @@ export default function PendingActivitiesDetails() {
 
   useEffect(() => {
     try {
-      fetch(`http://localhost:5000/api/activities/activitiy/${id}`, {}).then(
-        (response) => {
-          response.json().then((data) => {
-            setActivityData(data.data);
-          });
-        }
-      );
+      fetch(
+        `https://agya-new-main-umye.vercel.app/api/activities/activitiy/${id}`,
+        {}
+      ).then((response) => {
+        response.json().then((data) => {
+          setActivityData(data.data);
+        });
+      });
     } catch (e) {
       console.log(e);
     }
@@ -37,7 +38,7 @@ export default function PendingActivitiesDetails() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/activities/activities-updata/${id}`,
+      `https://agya-new-main-umye.vercel.app/api/activities/activities-updata/${id}`,
       {
         method: "PUT",
         headers: {
@@ -72,7 +73,7 @@ export default function PendingActivitiesDetails() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/activities/activities-updata/${id}`,
+      `https://agya-new-main-umye.vercel.app/api/activities/activities-updata/${id}`,
       {
         method: "PUT",
         headers: {

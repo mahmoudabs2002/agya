@@ -44,10 +44,10 @@ const AddActivity = () => {
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
         toastBC.current.show({
-          severity: 'error',
+          severity: "error",
           summary: "Image size should be less than 5MB",
           sticky: true,
-      });
+        });
         return;
       }
       setFeaturedImage(file);
@@ -63,10 +63,10 @@ const AddActivity = () => {
     const oversizedFiles = files.filter((file) => file.size > 5 * 1024 * 1024);
     if (oversizedFiles.length > 0) {
       toastBC.current.show({
-        severity: 'error',
+        severity: "error",
         summary: "Some images are larger than 5MB",
         sticky: true,
-    });
+      });
       return;
     }
     setSponsorImages((prev) => [...prev, ...files]);
@@ -93,26 +93,26 @@ const AddActivity = () => {
     const missingFields = required.filter((field) => !formData[field]);
     if (missingFields.length) {
       toastBC.current.show({
-        severity: 'error',
-        summary:`Required fields missing: ${missingFields.join(", ")}`,
+        severity: "error",
+        summary: `Required fields missing: ${missingFields.join(", ")}`,
         sticky: true,
-    });
+      });
       return false;
     }
     if (formData.location === "offline" && !formData.locationDetails) {
       toastBC.current.show({
-        severity: 'error',
-        summary:"Location details required for offline activities",
+        severity: "error",
+        summary: "Location details required for offline activities",
         sticky: true,
-    });
+      });
       return false;
     }
     if (formData.price === "Paid" && !formData.priceAmount) {
       toastBC.current.show({
-        severity: 'error',
-        summary:"Price amount required for paid activities",
+        severity: "error",
+        summary: "Price amount required for paid activities",
         sticky: true,
-    });
+      });
       return false;
     }
     return true;
@@ -124,7 +124,7 @@ const AddActivity = () => {
       formData.append("file", sponsorImage);
       try {
         const response = await fetch(
-          `http://localhost:5000/api/uploads/activities/${activityId}/sponsors`,
+          `https://agya-new-main-umye.vercel.app/api/uploads/activities/${activityId}/sponsors`,
           {
             method: "POST",
             body: formData,
@@ -137,10 +137,10 @@ const AddActivity = () => {
         sponsorUrls.push(data.imageUrl);
       } catch (error) {
         toastBC.current.show({
-          severity: 'error',
-          summary:`Failed to upload sponsor image: ${sponsorImage.name}`,
+          severity: "error",
+          summary: `Failed to upload sponsor image: ${sponsorImage.name}`,
           sticky: true,
-      });
+        });
       }
     }
     return sponsorUrls;
@@ -186,7 +186,7 @@ const AddActivity = () => {
         status: "pending",
       };
       const activityResponse = await fetch(
-        "http://localhost:5000/api/activities",
+        "https://agya-new-main-umye.vercel.app/api/activities",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -202,7 +202,7 @@ const AddActivity = () => {
         const featuredFormData = new FormData();
         featuredFormData.append("file", featuredImage);
         const featuredResponse = await fetch(
-          `http://localhost:5000/api/uploads/activities/${newActivity._id}`,
+          `https://agya-new-main-umye.vercel.app/api/uploads/activities/${newActivity._id}`,
           {
             method: "POST",
             body: featuredFormData,
@@ -216,7 +216,7 @@ const AddActivity = () => {
         const sponsorUrls = await uploadSponsorImages(newActivity._id);
         if (sponsorUrls.length > 0) {
           await fetch(
-            `http://localhost:5000/api/activities/${newActivity._id}`,
+            `https://agya-new-main-umye.vercel.app/api/activities/${newActivity._id}`,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
@@ -226,17 +226,17 @@ const AddActivity = () => {
         }
       }
       toastBC.current.show({
-        severity: 'success',
-        summary:"Activity created successfully!",
+        severity: "success",
+        summary: "Activity created successfully!",
         sticky: true,
-    });
+      });
       // navigate("/profile");
     } catch (error) {
       toastBC.current.show({
-        severity: 'error',
-        summary:error.message || "Failed to create activity",
+        severity: "error",
+        summary: error.message || "Failed to create activity",
         sticky: true,
-    });
+      });
     } finally {
       setUploading(false);
     }

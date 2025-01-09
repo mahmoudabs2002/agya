@@ -1,46 +1,49 @@
 import { useRef, useState } from "react";
 // import Navbar from "../components/navbar";
 import Sidebar from "../components/sidebar";
-import { Toast } from 'primereact/toast';
+import { Toast } from "primereact/toast";
 
 export default function NewAdmin() {
-    const [firstname ,setFirstname] = useState("")
-    const [lastname ,setLastName] = useState("")
-    const [email ,setEmail] = useState("")
-    const [password ,setPassword] = useState("")
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const toastBC = useRef(null);
   const [formData, setFormData] = useState({}); // State for form inputs
-  const [image, setImage] = useState()
+  const [image, setImage] = useState();
 
   const addAdmin = async (e) => {
     // setPageLevelLoader(true);
     e.preventDefault();
     const formDataToSend = { ...formData };
-      const imageData = new FormData();
-      imageData.append("file", image); // The key should match the multer configuration
-      imageData.set("firstname" ,formData.firstname)
-      imageData.set("lastname" ,formData.lastname)
-      imageData.set("email" ,formData.email)
-    
-    const response = await fetch("http://localhost:5000/api/auth/add-admin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firstname: firstname,
-        lastname: lastname,
-       email : email,
-       password: password,
-      }),
-    });
+    const imageData = new FormData();
+    imageData.append("file", image); // The key should match the multer configuration
+    imageData.set("firstname", formData.firstname);
+    imageData.set("lastname", formData.lastname);
+    imageData.set("email", formData.email);
+
+    const response = await fetch(
+      "https://agya-new-main-umye.vercel.app/api/auth/add-admin",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          password: password,
+        }),
+      }
+    );
     const finalData = await response.json();
     if (finalData.success) {
       toastBC.current.show({
-        severity: 'success',
+        severity: "success",
         summary: "added admin succesfully",
         sticky: true,
-    });
+      });
       setTimeout(() => {
         window.location.href = "/admin";
       }, 1000);
@@ -49,7 +52,7 @@ export default function NewAdmin() {
         severity: "error",
         summary: "something wrong",
         sticky: true,
-    });
+      });
     }
   };
   return (
@@ -64,14 +67,12 @@ export default function NewAdmin() {
             </span>{" "}
             <span className=" text-[#777]"> /</span>{" "}
             <span className=" pb-1 text-[#777]  border-b border-[#777]">
-                add Admin
+              add Admin
             </span>
           </div>
           <div className="flex flex-col items-center py-8 bg-white min-h-screen">
             {/* Title */}
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
-              add Admin
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">add Admin</h2>
 
             {/* Profile Image */}
             <div className="relative">
@@ -88,7 +89,7 @@ export default function NewAdmin() {
             {/* Form */}
             <form
               className="w-full max-w-3xl mt-6 bg-white px-6 py-8 border-t-2 "
-                onSubmit={addAdmin}
+              onSubmit={addAdmin}
             >
               {/* First Name */}
               <div className="mb-4">
@@ -99,7 +100,7 @@ export default function NewAdmin() {
                   type="text"
                   name="firstname"
                   value={firstname}
-                  onChange={(e)=> setFirstname(e.target.value)}
+                  onChange={(e) => setFirstname(e.target.value)}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-brown-500 focus:border-brown-500"
                 />
               </div>
@@ -113,7 +114,7 @@ export default function NewAdmin() {
                   type="text"
                   name="lastname"
                   value={lastname}
-                  onChange={(e)=> setLastName(e.target.value)}
+                  onChange={(e) => setLastName(e.target.value)}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-brown-500 focus:border-brown-500"
                 />
               </div>
@@ -127,7 +128,7 @@ export default function NewAdmin() {
                   type="email"
                   name="email"
                   value={email}
-                  onChange={(e)=> setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-brown-500 focus:border-brown-500"
                 />
               </div>
@@ -140,7 +141,7 @@ export default function NewAdmin() {
                   type="password"
                   name="Password"
                   value={password}
-                  onChange={(e)=> setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-brown-500 focus:border-brown-500"
                 />
               </div>

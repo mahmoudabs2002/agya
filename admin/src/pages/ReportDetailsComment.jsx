@@ -21,13 +21,14 @@ export default function ReportDetailsComment() {
 
   useEffect(() => {
     try {
-      fetch(`http://localhost:5000/api/comment/comments/${id}`, {}).then(
-        (response) => {
-          response.json().then((data) => {
-            setCommentData(data);
-          });
-        }
-      );
+      fetch(
+        `https://agya-new-main-umye.vercel.app/api/comment/comments/${id}`,
+        {}
+      ).then((response) => {
+        response.json().then((data) => {
+          setCommentData(data);
+        });
+      });
     } catch (e) {
       console.log(e);
     }
@@ -37,7 +38,7 @@ export default function ReportDetailsComment() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/reports/reports/${idItem}/read`,
+      `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
       {
         method: "PUT",
         headers: {
@@ -68,7 +69,7 @@ export default function ReportDetailsComment() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/auth/update-user/${commentData?.userId._id}`,
+      `https://agya-new-main-umye.vercel.app/api/auth/update-user/${commentData?.userId._id}`,
       {
         method: "PATCH",
         headers: {
@@ -82,7 +83,7 @@ export default function ReportDetailsComment() {
     const finalData = await response.json();
     if (finalData.success) {
       const response = await fetch(
-        `http://localhost:5000/api/notification/notifications`,
+        `https://agya-new-main-umye.vercel.app/api/notification/notifications`,
         {
           method: "POST",
           headers: {
@@ -110,7 +111,7 @@ export default function ReportDetailsComment() {
           sticky: true,
         });
         const response = await fetch(
-          `http://localhost:5000/api/reports/reports/${idItem}/read`,
+          `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
           {
             method: "PUT",
             headers: {
@@ -127,7 +128,7 @@ export default function ReportDetailsComment() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/auth/update-user/${commentData?.user.userId._id}`,
+      `https://agya-new-main-umye.vercel.app/api/auth/update-user/${commentData?.user.userId._id}`,
       {
         method: "PATCH",
         headers: {
@@ -141,7 +142,7 @@ export default function ReportDetailsComment() {
     const finalData = await response.json();
     if (finalData) {
       const response = await fetch(
-        `http://localhost:5000/api/notification/notifications`,
+        `https://agya-new-main-umye.vercel.app/api/notification/notifications`,
         {
           method: "POST",
           headers: {
@@ -170,7 +171,7 @@ export default function ReportDetailsComment() {
           sticky: true,
         });
         const response = await fetch(
-          `http://localhost:5000/api/reports/reports/${idItem}/read`,
+          `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
           {
             method: "PUT",
             headers: {
@@ -276,16 +277,18 @@ export default function ReportDetailsComment() {
                 <div>
                   <p className="text-DateTime text-sm">
                     {commentData === undefined
-                                  ? null
-                                  : format(commentData?.post?.createdAt, "P")}{" "}
-                                •{" "}
-                                {commentData === undefined
-                                  ? null
-                                  : format(commentData?.post?.createdAt, "p")}
+                      ? null
+                      : format(commentData?.post?.createdAt, "P")}{" "}
+                    •{" "}
+                    {commentData === undefined
+                      ? null
+                      : format(commentData?.post?.createdAt, "p")}
                   </p>
                 </div>
               </div>
-              <div className=" w-[800px] ml-16">{commentData?.post?.postId?.content}</div>
+              <div className=" w-[800px] ml-16">
+                {commentData?.post?.postId?.content}
+              </div>
             </div>
             <div className="border mt-4 bg-[#C5AD891A] border-main/40 rounded-b-xl  py-8 px-8">
               <div className="flex justify-between items-start mb-6  ">
@@ -315,7 +318,9 @@ export default function ReportDetailsComment() {
                   </p>
                 </div>
               </div>
-              <div className=" w-[800px] ml-16">{commentData?.user?.content}</div>
+              <div className=" w-[800px] ml-16">
+                {commentData?.user?.content}
+              </div>
             </div>
             <div className=" flex justify-center items-center gap-4 mt-6">
               <form action="" onSubmit={warn}>

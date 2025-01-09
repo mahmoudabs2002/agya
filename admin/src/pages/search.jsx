@@ -5,29 +5,30 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 export default function Search() {
-    const search = useLocation().search;
-    const searchItem = new URLSearchParams(search).get('search');
+  const search = useLocation().search;
+  const searchItem = new URLSearchParams(search).get("search");
 
   const navigate = useNavigate();
-    const [articlesCount, setArticlesCount] = useState();
-    const [articlesData, setArticlesData] = useState([]);
-    const [featuredArticlesData, setFeaturedArticlesData] = useState([]);
-  
-      useEffect(() => {
-          try {
-            fetch(`http://localhost:5000/api/article/articles?search=${searchItem}`, {}).then(
-              (response) => {
-                response.json().then((data) => {
-                  setArticlesCount(data.numberOfArticles);
-                  setArticlesData(data.data);
-                });
-              }
-            );
-          } catch (e) {
-            console.log(e);
-          }
-        }, [searchItem]);
-          
+  const [articlesCount, setArticlesCount] = useState();
+  const [articlesData, setArticlesData] = useState([]);
+  const [featuredArticlesData, setFeaturedArticlesData] = useState([]);
+
+  useEffect(() => {
+    try {
+      fetch(
+        `https://agya-new-main-umye.vercel.app/api/article/articles?search=${searchItem}`,
+        {}
+      ).then((response) => {
+        response.json().then((data) => {
+          setArticlesCount(data.numberOfArticles);
+          setArticlesData(data.data);
+        });
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }, [searchItem]);
+
   return (
     <div className=" flex justify-between">
       <Sidebar />
@@ -40,8 +41,10 @@ export default function Search() {
           </h1>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {
-              articlesData === undefined ? <div>Loading</div> : articlesData.map((article, index) => (
+            {articlesData === undefined ? (
+              <div>Loading</div>
+            ) : (
+              articlesData.map((article, index) => (
                 <div
                   key={index}
                   className="group overflow-hidden  rounded-lg min-h-72 h-72 max-h-72 border border-main bg-white shadow transition-transform hover:-translate-y-1 flex flex-col"
@@ -53,16 +56,18 @@ export default function Search() {
                       className=" w-full transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
-  
+
                   <div className="p-8 flex-grow flex flex-col justify-between text-center">
                     <h2 className="mb-1 text-base font-bold leading-tight text-gray-900">
                       {article.title}
                     </h2>
-                    <p className="text-gray-500 text-xs">{article.authorName}</p>
+                    <p className="text-gray-500 text-xs">
+                      {article.authorName}
+                    </p>
                   </div>
                 </div>
               ))
-            }
+            )}
           </div>
         </div>
       </div>

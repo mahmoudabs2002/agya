@@ -3,16 +3,14 @@ import Navbar from "../components/navbar";
 import Sidebar from "../components/sidebar";
 // import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
-import { EllipsisVertical } from 'lucide-react';
-import { Toast } from 'primereact/toast';
-
+import { EllipsisVertical } from "lucide-react";
+import { Toast } from "primereact/toast";
 
 export default function Tages() {
   // const navigate = useNavigate();
   const [tagName, setTageName] = useState("");
   const [tagData, setTageData] = useState([]);
-    const toastBC = useRef(null);
-  
+  const toastBC = useRef(null);
 
   const [isOpen, setIsOpen] = useState();
 
@@ -22,11 +20,13 @@ export default function Tages() {
 
   useEffect(() => {
     try {
-      fetch("http://localhost:5000/api/tags/all", {}).then((response) => {
-        response.json().then((data) => {
-          setTageData(data.data);
-        });
-      });
+      fetch("https://agya-new-main-umye.vercel.app/api/tags/all", {}).then(
+        (response) => {
+          response.json().then((data) => {
+            setTageData(data.data);
+          });
+        }
+      );
     } catch (e) {
       console.log(e);
     }
@@ -35,22 +35,25 @@ export default function Tages() {
   const addTages = async (e) => {
     // setPageLevelLoader(true);
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/tags/add-tag", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: tagName,
-      }),
-    });
+    const response = await fetch(
+      "https://agya-new-main-umye.vercel.app/api/tags/add-tag",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: tagName,
+        }),
+      }
+    );
     const finalData = await response.json();
     if (finalData.success) {
       toastBC.current.show({
-        severity: 'success',
+        severity: "success",
         summary: "add tag succesfully",
         sticky: true,
-    });
+      });
       setTimeout(() => {
         window.location.href = "/tags";
       }, 1000);
@@ -59,19 +62,22 @@ export default function Tages() {
     }
   };
   const deleteTag = async (id) => {
-    const data = await fetch(`http://localhost:5000/api/tags/delete-tag/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const data = await fetch(
+      `https://agya-new-main-umye.vercel.app/api/tags/delete-tag/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const finalData = await data.json();
     if (finalData.success) {
       toastBC.current.show({
-        severity: 'success',
+        severity: "success",
         summary: "removed tag succesfully",
         sticky: true,
-    });
+      });
       setTimeout(() => {
         window.location.href = "/tags";
       }, 1000);
@@ -99,10 +105,21 @@ export default function Tages() {
                     className=" flex relative justify-between items-center py-2 gap-4 px-2 bg-main text-white font-light max-h-fit rounded-[5px]"
                   >
                     <div className="ml-4">{tag.name}</div>
-                    <EllipsisVertical className=" cursor-pointer" onClick={()=> isOpen === tag._id ? setIsOpen():setIsOpen(tag._id) } />
-                      {
-                        isOpen === tag._id ?  <div className=" duration-700 absolute bg-white top-11 -right-6 py-2 px-8 border cursor-pointer  text-black" onClick={()=> deleteTag(tag._id)}> delete</div>: null
+                    <EllipsisVertical
+                      className=" cursor-pointer"
+                      onClick={() =>
+                        isOpen === tag._id ? setIsOpen() : setIsOpen(tag._id)
                       }
+                    />
+                    {isOpen === tag._id ? (
+                      <div
+                        className=" duration-700 absolute bg-white top-11 -right-6 py-2 px-8 border cursor-pointer  text-black"
+                        onClick={() => deleteTag(tag._id)}
+                      >
+                        {" "}
+                        delete
+                      </div>
+                    ) : null}
                     {/* <IconButton
                       aria-label="more"
                       id="long-button"

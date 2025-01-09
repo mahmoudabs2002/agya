@@ -14,7 +14,7 @@ export default function ReportDetailsArticle() {
   const [articleData, setArticleData] = useState();
   // const navigate = useNavigate();
   const search = useLocation().search;
-  const idItem = new URLSearchParams(search).get('id');
+  const idItem = new URLSearchParams(search).get("id");
 
   const toastBC = useRef(null);
 
@@ -23,13 +23,14 @@ export default function ReportDetailsArticle() {
 
   useEffect(() => {
     try {
-      fetch(`http://localhost:5000/api/articles/${id}`, {}).then(
-        (response) => {
-          response.json().then((data) => {
-            setArticleData(data);
-          });
-        }
-      );
+      fetch(
+        `https://agya-new-main-umye.vercel.app/api/articles/${id}`,
+        {}
+      ).then((response) => {
+        response.json().then((data) => {
+          setArticleData(data);
+        });
+      });
     } catch (e) {
       console.log(e);
     }
@@ -39,7 +40,7 @@ export default function ReportDetailsArticle() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/reports/reports/${idItem}/read`,
+      `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
       {
         method: "PUT",
         headers: {
@@ -72,7 +73,7 @@ export default function ReportDetailsArticle() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/auth/update-user/${articleData.authorId._id}`,
+      `https://agya-new-main-umye.vercel.app/api/auth/update-user/${articleData.authorId._id}`,
       {
         method: "PATCH",
         headers: {
@@ -86,7 +87,7 @@ export default function ReportDetailsArticle() {
     const finalData = await response.json();
     if (finalData.success) {
       const response = await fetch(
-        `http://localhost:5000/api/notification/notifications`,
+        `https://agya-new-main-umye.vercel.app/api/notification/notifications`,
         {
           method: "POST",
           headers: {
@@ -107,7 +108,7 @@ export default function ReportDetailsArticle() {
           sticky: true,
         });
         setIsOpen(false);
-        setConfirm("ban")
+        setConfirm("ban");
       } else {
         toastBC.current.show({
           severity: "success",
@@ -115,7 +116,7 @@ export default function ReportDetailsArticle() {
           sticky: true,
         });
         const response = await fetch(
-          `http://localhost:5000/api/reports/reports/${idItem}/read`,
+          `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
           {
             method: "PUT",
             headers: {
@@ -125,7 +126,7 @@ export default function ReportDetailsArticle() {
         );
         await response.json();
         setIsOpen(false);
-        setConfirm("ban")
+        setConfirm("ban");
       }
     }
   };
@@ -133,7 +134,7 @@ export default function ReportDetailsArticle() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/auth/update-user/${articleData.authorId._id}`,
+      `https://agya-new-main-umye.vercel.app/api/auth/update-user/${articleData.authorId._id}`,
       {
         method: "PATCH",
         headers: {
@@ -147,7 +148,7 @@ export default function ReportDetailsArticle() {
     const finalData = await response.json();
     if (finalData.success) {
       const response = await fetch(
-        `http://localhost:5000/api/notification/notifications`,
+        `https://agya-new-main-umye.vercel.app/api/notification/notifications`,
         {
           method: "POST",
           headers: {
@@ -168,7 +169,7 @@ export default function ReportDetailsArticle() {
           sticky: true,
         });
         setIsOpen(false);
-        setConfirm("warn")
+        setConfirm("warn");
       } else {
         toastBC.current.show({
           severity: "success",
@@ -176,7 +177,7 @@ export default function ReportDetailsArticle() {
           sticky: true,
         });
         const response = await fetch(
-          `http://localhost:5000/api/reports/reports/${idItem}/read`,
+          `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
           {
             method: "PUT",
             headers: {
@@ -186,7 +187,7 @@ export default function ReportDetailsArticle() {
         );
         await response.json();
         setIsOpen(false);
-        setConfirm("warn")
+        setConfirm("warn");
       }
     }
   };
@@ -231,21 +232,22 @@ export default function ReportDetailsArticle() {
               >
                 X
               </div>
-              <form onSubmit={ban} className=" flex justify-center items-center ml-5 mt-10 gap-4">
-                  <button
-                    className=" block  bg-main text-white py-2 px-8 my-8 rounded-xl "
-                    onClick={() => {
-                    }}
-                  >
-                    Ban for 3 days
-                  </button>
-                  <button
-                    className=" block border-main border  py-2 px-8 my-4 rounded-xl "
-                    onClick={() => {
-                    }}
-                  >
-                    Ban for 7 days
-                  </button>
+              <form
+                onSubmit={ban}
+                className=" flex justify-center items-center ml-5 mt-10 gap-4"
+              >
+                <button
+                  className=" block  bg-main text-white py-2 px-8 my-8 rounded-xl "
+                  onClick={() => {}}
+                >
+                  Ban for 3 days
+                </button>
+                <button
+                  className=" block border-main border  py-2 px-8 my-4 rounded-xl "
+                  onClick={() => {}}
+                >
+                  Ban for 7 days
+                </button>
               </form>
             </div>
           </div>
@@ -302,11 +304,9 @@ export default function ReportDetailsArticle() {
             ></div>
             <div className=" flex justify-center items-center gap-4 mt-6">
               <form action="" onSubmit={warn}>
-              <button
-                className=" border-main border py-2 w-36 rounded-xl"
-              >
-                warn
-              </button>
+                <button className=" border-main border py-2 w-36 rounded-xl">
+                  warn
+                </button>
               </form>
               <button
                 onClick={() => setIsOpen(true)}

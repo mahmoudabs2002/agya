@@ -9,30 +9,31 @@ import { GlobalContext } from "../context/GlobelContext";
 export default function AdminEdit() {
   const [adminsData, setAdminsData] = useState();
   const { setIsAuthUser } = useContext(GlobalContext);
-  const [user ,setUser] = useState()
+  const [user, setUser] = useState();
   const [formData, setFormData] = useState({}); // State for form inputs
   const [image, setImage] = useState();
   const toastBC = useRef(null);
 
   const { id } = useParams();
- 
+
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("userInfo")))
+    setUser(JSON.parse(localStorage.getItem("userInfo")));
     const fetchUserData = async () => {
       try {
-        fetch(`http://localhost:5000/api/auth/single-admin/${id}`, {}).then(
-          (response) => {
-            response.json().then((data) => {
-              setAdminsData(data.data);
-              setFormData({
-                firstname: data.data.firstname || "",
-                lastname: data.data.lastname || "",
-                email: data.data.email || "",
-                image: data.data.image || "",
-              });
+        fetch(
+          `https://agya-new-main-umye.vercel.app/api/auth/single-admin/${id}`,
+          {}
+        ).then((response) => {
+          response.json().then((data) => {
+            setAdminsData(data.data);
+            setFormData({
+              firstname: data.data.firstname || "",
+              lastname: data.data.lastname || "",
+              email: data.data.email || "",
+              image: data.data.image || "",
             });
-          }
-        );
+          });
+        });
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -42,7 +43,7 @@ export default function AdminEdit() {
   }, [id]);
   // useEffect(() => {
   //   try {
-  //     fetch(`http://localhost:5000/api/auth/single-admin/${id}`, {}).then(
+  //     fetch(`https://agya-new-main-umye.vercel.app/api/auth/single-admin/${id}`, {}).then(
   //       (response) => {
   //         response.json().then((data) => {
   //           setAdminsData(data.data);
@@ -64,14 +65,13 @@ export default function AdminEdit() {
     imageData.set("email", formData.email);
     // Upload the image to the backend
     const imageUploadResponse = await fetch(
-      `http://localhost:5000/api/uploads/profiles/${adminsData._id}`,
+      `https://agya-new-main-umye.vercel.app/api/uploads/profiles/${adminsData._id}`,
       {
         method: "PUT",
         body: imageData,
       }
     );
     const finalData = await imageUploadResponse.json();
-
 
     // if()
     if (finalData.success) {
@@ -80,8 +80,9 @@ export default function AdminEdit() {
         summary: "Profile image uploaded and user updated successfully.",
         sticky: true,
       });
-      user.id === id?
-      localStorage.setItem("userInfo", JSON.stringify(finalData.user)) : null;
+      user.id === id
+        ? localStorage.setItem("userInfo", JSON.stringify(finalData.user))
+        : null;
       // setIsAuthUser(finalData.user);
       setTimeout(() => {
         window.location.href = "/admin";

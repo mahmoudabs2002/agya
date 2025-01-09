@@ -3,7 +3,7 @@ import Navbar from "../components/navbar";
 import Sidebar from "../components/sidebar";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { axisClasses } from "@mui/x-charts/ChartsAxis";
-import {valueFormatter } from "../assets/data";
+import { valueFormatter } from "../assets/data";
 import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 import { format } from "date-fns";
 import { MessageCircleWarning, Newspaper, Users } from "lucide-react";
@@ -17,8 +17,7 @@ export default function Home() {
   let [usersId, setUsersId] = useState([]);
   let [month, setMonth] = useState([]);
 
-
-  let dataset = []
+  let dataset = [];
   const chartSetting = {
     yAxis: [],
     width: 1000,
@@ -37,23 +36,12 @@ export default function Home() {
   };
   useEffect(() => {
     try {
-      fetch("http://localhost:5000/api/reports/all-reports", {}).then(
-        (response) => {
-          response.json().then((data) => {
-            setReportsCount(data.numberOfReports);
-          });
-        }
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  }, []);
-  useEffect(() => {
-    try {
-      fetch("http://localhost:5000/api/user/users", {}).then((response) => {
+      fetch(
+        "https://agya-new-main-umye.vercel.app/api/reports/all-reports",
+        {}
+      ).then((response) => {
         response.json().then((data) => {
-          setUsersCount(data.numberOfUsers);
-          setUsersData(data.data);
+          setReportsCount(data.numberOfReports);
         });
       });
     } catch (e) {
@@ -62,14 +50,29 @@ export default function Home() {
   }, []);
   useEffect(() => {
     try {
-      fetch("http://localhost:5000/api/articles/articles", {}).then(
+      fetch("https://agya-new-main-umye.vercel.app/api/user/users", {}).then(
         (response) => {
           response.json().then((data) => {
-            setArticlesCount(data.numberOfArticles);
-            setArticlesData(data.data);
+            setUsersCount(data.numberOfUsers);
+            setUsersData(data.data);
           });
         }
       );
+    } catch (e) {
+      console.log(e);
+    }
+  }, []);
+  useEffect(() => {
+    try {
+      fetch(
+        "https://agya-new-main-umye.vercel.app/api/articles/articles",
+        {}
+      ).then((response) => {
+        response.json().then((data) => {
+          setArticlesCount(data.numberOfArticles);
+          setArticlesData(data.data);
+        });
+      });
     } catch (e) {
       console.log(e);
     }
@@ -82,7 +85,7 @@ export default function Home() {
     });
     setUsersId(userid);
   }, [usersData]);
-  
+
   useEffect(() => {
     let item = [];
     articlesData.map((article) => {
@@ -138,9 +141,9 @@ export default function Home() {
             <h3 className=" text-2xl font-bold mx-4">Articles </h3>
             {month.map((item) => {
               dataset.push({
-                  byUser: articlesCount,
-                  month: format(item, "MMM"),
-              })
+                byUser: articlesCount,
+                month: format(item, "MMM"),
+              });
             })}
             <BarChart
               dataset={dataset}
@@ -184,7 +187,7 @@ export default function Home() {
               <div className=" mx-auto">
                 <h3>Registered</h3>
                 <p className=" flex items-center justify-center text-black/50 gap-2">
-                  <p className="bg-main  w-2 h-2 rounded-full"> </p> 
+                  <p className="bg-main  w-2 h-2 rounded-full"> </p>
                   <p>{usersCount}</p>
                 </p>
               </div>

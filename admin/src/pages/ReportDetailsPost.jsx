@@ -21,13 +21,14 @@ export default function ReportDetailsPost() {
 
   useEffect(() => {
     try {
-      fetch(`http://localhost:5000/api/post/posts/${id}`, {}).then(
-        (response) => {
-          response.json().then((data) => {
-            setPostData(data);
-          });
-        }
-      );
+      fetch(
+        `https://agya-new-main-umye.vercel.app/api/post/posts/${id}`,
+        {}
+      ).then((response) => {
+        response.json().then((data) => {
+          setPostData(data);
+        });
+      });
     } catch (e) {
       console.log(e);
     }
@@ -37,7 +38,7 @@ export default function ReportDetailsPost() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/reports/reports/${idItem}/read`,
+      `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
       {
         method: "PUT",
         headers: {
@@ -68,7 +69,7 @@ export default function ReportDetailsPost() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/auth/update-user/${postData.userId}`,
+      `https://agya-new-main-umye.vercel.app/api/auth/update-user/${postData.userId}`,
       {
         method: "PATCH",
         headers: {
@@ -82,7 +83,7 @@ export default function ReportDetailsPost() {
     const finalData = await response.json();
     if (finalData.success) {
       const response = await fetch(
-        `http://localhost:5000/api/notification/notifications`,
+        `https://agya-new-main-umye.vercel.app/api/notification/notifications`,
         {
           method: "POST",
           headers: {
@@ -103,16 +104,16 @@ export default function ReportDetailsPost() {
           sticky: true,
         });
         setIsOpen(false);
-        setConfirm("ban")
+        setConfirm("ban");
       } else {
         toastBC.current.show({
           severity: "success",
           summary: " report has updated succesfully",
           sticky: true,
         });
-        
+
         const response = await fetch(
-          `http://localhost:5000/api/reports/reports/${idItem}/read`,
+          `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
           {
             method: "PUT",
             headers: {
@@ -122,7 +123,7 @@ export default function ReportDetailsPost() {
         );
         await response.json();
         setIsOpen(false);
-        setConfirm("ban")
+        setConfirm("ban");
         setTimeout(() => {
           window.location.href = "/report";
         }, 500);
@@ -133,7 +134,7 @@ export default function ReportDetailsPost() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/auth/update-user/${postData.userId}`,
+      `https://agya-new-main-umye.vercel.app/api/auth/update-user/${postData.userId}`,
       {
         method: "PATCH",
         headers: {
@@ -147,7 +148,7 @@ export default function ReportDetailsPost() {
     const finalData = await response.json();
     if (finalData.success) {
       const response = await fetch(
-        `http://localhost:5000/api/notification/notifications`,
+        `https://agya-new-main-umye.vercel.app/api/notification/notifications`,
         {
           method: "POST",
           headers: {
@@ -176,7 +177,7 @@ export default function ReportDetailsPost() {
           sticky: true,
         });
         const response = await fetch(
-          `http://localhost:5000/api/reports/reports/${idItem}/read`,
+          `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
           {
             method: "PUT",
             headers: {
@@ -192,7 +193,7 @@ export default function ReportDetailsPost() {
   };
   return (
     <>
-       {confirm === "" ? null : confirm === "ban" ? (
+      {confirm === "" ? null : confirm === "ban" ? (
         <div className=" z-[1000] fixed  bg-black/40 w-[1500px] h-[110vh] middle  ">
           <div className=" bg-white rounded-2xl flex flex-col py-4 px-4 justify-center middle absolute items-center">
             <div
@@ -231,21 +232,22 @@ export default function ReportDetailsPost() {
               >
                 X
               </div>
-              <form onSubmit={ban} className=" flex justify-center items-center ml-5 mt-10 gap-4">
-                  <button
-                    className=" block  bg-main text-white py-2 px-8 my-8 rounded-xl "
-                    onClick={() => {
-                    }}
-                  >
-                    Ban for 3 days
-                  </button>
-                  <button
-                    className=" block border-main border  py-2 px-8 my-4 rounded-xl "
-                    onClick={() => {
-                    }}
-                  >
-                    Ban for 7 days
-                  </button>
+              <form
+                onSubmit={ban}
+                className=" flex justify-center items-center ml-5 mt-10 gap-4"
+              >
+                <button
+                  className=" block  bg-main text-white py-2 px-8 my-8 rounded-xl "
+                  onClick={() => {}}
+                >
+                  Ban for 3 days
+                </button>
+                <button
+                  className=" block border-main border  py-2 px-8 my-4 rounded-xl "
+                  onClick={() => {}}
+                >
+                  Ban for 7 days
+                </button>
               </form>
             </div>
           </div>

@@ -15,13 +15,14 @@ export default function ActiviteDetails() {
 
   useEffect(() => {
     try {
-      fetch(`http://localhost:5000/api/activities/activitiy/${id}`, {}).then(
-        (response) => {
-          response.json().then((data) => {
-            setActivityData(data.data);
-          });
-        }
-      );
+      fetch(
+        `https://agya-new-main-umye.vercel.app/api/activities/activitiy/${id}`,
+        {}
+      ).then((response) => {
+        response.json().then((data) => {
+          setActivityData(data.data);
+        });
+      });
     } catch (e) {
       console.log(e);
     }
@@ -76,7 +77,7 @@ export default function ActiviteDetails() {
             </div>
           </div>
           <div className="">
-          <h3 className=" font-bold">About</h3>
+            <h3 className=" font-bold">About</h3>
             <div
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(activityData?.description || ""),
