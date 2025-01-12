@@ -15,7 +15,7 @@ export default function Login() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      "https://agya-new-main-umye.vercel.app/api/auth/admin-login",
+      "https://agya-backend.vercel.app/api/auth/admin-login",
       {
         method: "POST",
         headers: {
