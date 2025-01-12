@@ -38,7 +38,7 @@ export default function Login() {
         sticky: true,
       });
       setTimeout(() => {
-        window.location.href = "/overview";
+        window.location.href = "/home";
       }, 500);
     } else {
       toastBC.current.show({
