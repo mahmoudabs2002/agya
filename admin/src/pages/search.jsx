@@ -11,12 +11,10 @@ export default function Search() {
   const navigate = useNavigate();
   const [articlesCount, setArticlesCount] = useState();
   const [articlesData, setArticlesData] = useState([]);
-  const [featuredArticlesData, setFeaturedArticlesData] = useState([]);
-
   useEffect(() => {
     try {
       fetch(
-        `https://agya-new-main-umye.vercel.app/api/article/articles?search=${searchItem}`,
+        `https://agyademo.uber.space/api/articles/articles?search=${searchItem}`,
         {}
       ).then((response) => {
         response.json().then((data) => {

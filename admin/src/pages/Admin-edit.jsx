@@ -5,6 +5,7 @@ import { PencilOff } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Toast } from "primereact/toast";
 import { GlobalContext } from "../context/GlobelContext";
+import axios from "axios"
 
 export default function AdminEdit() {
   const [adminsData, setAdminsData] = useState();
@@ -21,7 +22,7 @@ export default function AdminEdit() {
     const fetchUserData = async () => {
       try {
         fetch(
-          `https://agya-new-main-umye.vercel.app/api/auth/single-admin/${id}`,
+          `https://agyademo.uber.space/api/auth/single-admin/${id}`,
           {}
         ).then((response) => {
           response.json().then((data) => {
@@ -43,7 +44,7 @@ export default function AdminEdit() {
   }, [id]);
   // useEffect(() => {
   //   try {
-  //     fetch(`https://agya-new-main-umye.vercel.app/api/auth/single-admin/${id}`, {}).then(
+  //     fetch(`https://agyademo.uber.space/api/auth/single-admin/${id}`, {}).then(
   //       (response) => {
   //         response.json().then((data) => {
   //           setAdminsData(data.data);
@@ -58,35 +59,44 @@ export default function AdminEdit() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const formDataToSend = { ...formData };
-    const imageData = new FormData();
-    imageData.append("file", image); // The key should match the multer configuration
-    imageData.set("firstname", formData.firstname);
-    imageData.set("lastname", formData.lastname);
-    imageData.set("email", formData.email);
+    // const imageData = new FormData();
+    const imageUrl = new FormData()
+    imageUrl.append("file", image); // The key should match the multer configuration
+    // imageData.set("firstname", formData.firstname);
+    // imageData.set("lastname", formData.lastname);
+    // imageData.set("email", formData.email);
     // Upload the image to the backend
-    const imageUploadResponse = await fetch(
-      `https://agya-new-main-umye.vercel.app/api/uploads/profiles/${adminsData._id}`,
+    const response = await axios.post(
+      `https://agyademo.uber.space/upload`,
+      imageUrl,
       {
-        method: "PUT",
-        body: imageData,
-      }
+        headers: { "Content-Type": "multipart/form-data" },
+      },
     );
-    const finalData = await imageUploadResponse.json();
-
+      formDataToSend.image =`https://agyademo.uber.space/files/${response.data.link}`
     // if()
-    if (finalData.success) {
+    if (response) {
+
+      const finalData = await axios.put(
+        `https://agyademo.uber.space/api/auth/updata-admin/${id}`,
+        formDataToSend,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
       toastBC.current.show({
         severity: "success",
         summary: "Profile image uploaded and user updated successfully.",
         sticky: true,
       });
-      user.id === id
-        ? localStorage.setItem("userInfo", JSON.stringify(finalData.user))
-        : null;
+      // user.id === id
+      //   ? localStorage.setItem("userInfo", JSON.stringify(response.user))
+      //   : null;
+
       // setIsAuthUser(finalData.user);
-      setTimeout(() => {
-        window.location.href = "/admin";
-      }, 1000);
+      // setTimeout(() => {
+      //   window.location.href = "/admin";
+      // }, 1000);
     } else {
       toastBC.current.show({
         severity: "error",
@@ -95,7 +105,7 @@ export default function AdminEdit() {
       });
     }
     // Update the formData with the new image URL from the response
-    formDataToSend.image = imageUploadResponse.data.user.image;
+
   };
 
   const handleImageChange = (e) => {

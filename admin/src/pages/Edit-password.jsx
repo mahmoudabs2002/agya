@@ -11,7 +11,7 @@ export default function EditPassword() {
   const ResetPassowrd = async (e) => {
     e.preventDefault();
     const response = await fetch(
-      `https://agya-new-main-umye.vercel.app/api/auth/reset-password/${id}`,
+      `https://agyademo.uber.space/api/auth/reset-password/${id}`,
       {
         method: "POST",
         headers: {

@@ -23,14 +23,13 @@ export default function ReportDetailsArticle() {
 
   useEffect(() => {
     try {
-      fetch(
-        `https://agya-new-main-umye.vercel.app/api/articles/${id}`,
-        {}
-      ).then((response) => {
-        response.json().then((data) => {
-          setArticleData(data);
-        });
-      });
+      fetch(`https://agyademo.uber.space/api/articles/${id}`, {}).then(
+        (response) => {
+          response.json().then((data) => {
+            setArticleData(data);
+          });
+        }
+      );
     } catch (e) {
       console.log(e);
     }
@@ -40,7 +39,7 @@ export default function ReportDetailsArticle() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
+      `https://agyademo.uber.space/api/reports/reports/${idItem}/read`,
       {
         method: "PUT",
         headers: {
@@ -73,7 +72,7 @@ export default function ReportDetailsArticle() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `https://agya-new-main-umye.vercel.app/api/auth/update-user/${articleData.authorId._id}`,
+      `https://agyademo.uber.space/api/auth/update-user/${articleData.authorId._id}`,
       {
         method: "PATCH",
         headers: {
@@ -87,7 +86,7 @@ export default function ReportDetailsArticle() {
     const finalData = await response.json();
     if (finalData.success) {
       const response = await fetch(
-        `https://agya-new-main-umye.vercel.app/api/notification/notifications`,
+        `https://agyademo.uber.space/api/notifications/`,
         {
           method: "POST",
           headers: {
@@ -95,8 +94,8 @@ export default function ReportDetailsArticle() {
           },
           body: JSON.stringify({
             userId: articleData.authorId._id,
-            content: "ban",
-            category: "ban",
+            content: `After careful review of the article, “${articleData?.title}” you shared, we've determined that the article contained misleading information and have taken steps to remove it from our platform.We understand the importance of accurate and reliable information, and we're committed to maintaining high quality standards on our platform.`,
+            category: "Article Reported",
           }),
         }
       );
@@ -116,7 +115,7 @@ export default function ReportDetailsArticle() {
           sticky: true,
         });
         const response = await fetch(
-          `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
+          `https://agyademo.uber.space/api/reports/reports/${idItem}/read`,
           {
             method: "PUT",
             headers: {
@@ -134,7 +133,7 @@ export default function ReportDetailsArticle() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `https://agya-new-main-umye.vercel.app/api/auth/update-user/${articleData.authorId._id}`,
+      `https://agyademo.uber.space/api/auth/update-user/${articleData.authorId._id}`,
       {
         method: "PATCH",
         headers: {
@@ -148,7 +147,7 @@ export default function ReportDetailsArticle() {
     const finalData = await response.json();
     if (finalData.success) {
       const response = await fetch(
-        `https://agya-new-main-umye.vercel.app/api/notification/notifications`,
+        `https://agyademo.uber.space/api/notifications/`,
         {
           method: "POST",
           headers: {
@@ -156,8 +155,8 @@ export default function ReportDetailsArticle() {
           },
           body: JSON.stringify({
             userId: articleData.authorId._id,
-            content: "warn",
-            category: "warn",
+            content: `After careful review of the article, “${articleData?.title}” you shared, we've determined that the article contained misleading information and have taken steps to remove it from our platform.We understand the importance of accurate and reliable information, and we're committed to maintaining high quality standards on our platform.`,
+            category: "Article Reported",
           }),
         }
       );
@@ -177,7 +176,7 @@ export default function ReportDetailsArticle() {
           sticky: true,
         });
         const response = await fetch(
-          `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
+          `https://agyademo.uber.space/api/reports/reports/${idItem}/read`,
           {
             method: "PUT",
             headers: {

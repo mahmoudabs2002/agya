@@ -24,7 +24,7 @@ const Sidebar = () => {
   }, [setIsAuthUser]);
 
   const logout = async () => {
-    fetch("https://agya-new-main-umye.vercel.app/api/auth/logout", {
+    fetch("https://agyademo.uber.space/api/auth/logout", {
       method: "POST",
       credentials: "include",
     }).then(() => {

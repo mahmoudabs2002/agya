@@ -1,13 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import { Toast } from "primereact/toast";
+import { useNavigate } from "react-router-dom";
 
 import CountdownTimer from "../components/countDown/index";
+
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");
   const [disabled, setDisabled] = useState(false);
-  const [message, setMessage] = useState("reset password ");
+  const [message, setMessage] = useState("reset password");
   const [timer, setTimer] = useState(false);
   const toastBC = useRef(null);
+  const navigate = useNavigate();
 
   const [popup, setPopup] = useState(false);
   const [otp, setOtp] = useState(new Array(4).fill(""));
@@ -43,7 +46,7 @@ export default function ForgetPassword() {
   const SendOTB = async (e) => {
     e.preventDefault();
     const response = await fetch(
-      "https://agya-new-main-umye.vercel.app/api/otp/sendOTP",
+      "https://agyademo.uber.space/api/otp/sendOTP",
       {
         method: "POST",
         headers: {
@@ -75,7 +78,7 @@ export default function ForgetPassword() {
   const notReceived = async (e) => {
     e.preventDefault();
     const response = await fetch(
-      "https://agya-new-main-umye.vercel.app/api/otp/sendOTP",
+      "https://agyademo.uber.space/api/otp/sendOTP",
       {
         method: "POST",
         headers: {
@@ -108,7 +111,7 @@ export default function ForgetPassword() {
   const VerifyOTP = async (e) => {
     e.preventDefault();
     const response = await fetch(
-      "https://agya-new-main-umye.vercel.app/api/otp/verifyOTP",
+      "https://agyademo.uber.space/api/otp/verifyOTP",
       {
         method: "POST",
         headers: {
@@ -168,7 +171,10 @@ export default function ForgetPassword() {
               Send
             </button>
           </form>
-          <a className=" mt-4 block text-sky-700 cursor-pointer">
+          <a
+            className=" mt-4 block text-sky-700 cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             Return to Login Page →
           </a>
         </div>

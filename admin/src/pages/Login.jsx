@@ -15,7 +15,7 @@ export default function Login() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      "https://agya-backend.vercel.app/api/auth/admin-login",
+      "https://agyademo.uber.space/api/auth/admin-login",
       {
         method: "POST",
         headers: {
@@ -38,7 +38,7 @@ export default function Login() {
         sticky: true,
       });
       setTimeout(() => {
-        window.location.href = "/home";
+        window.location.href = "/overview";
       }, 500);
     } else {
       toastBC.current.show({

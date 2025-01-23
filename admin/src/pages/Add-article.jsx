@@ -1,20 +1,20 @@
 import { CiSearch } from "react-icons/ci";
 import { useState, useContext, useEffect, useRef } from "react";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { FaFile } from "react-icons/fa";
 import { IoTrashBinOutline } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
 import { Edit3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { GlobalContext } from "../context/GlobelContext";
-import Navbar from "../components/navbar";
 import { Toast } from "primereact/toast";
+
+import Navbar from "../components/Navbar";
+import { GlobalContext } from "../context/GlobelContext";
+import axios from "axios"; // Import your configured axios instance
+import RichTextWithTranslate from "../components/richText";
 
 export default function NewArticle() {
   const navigate = useNavigate();
-  const toastBC = useRef(null);
-
   const { setIsAuthUser, isAuthUser } = useContext(GlobalContext);
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState([]);
@@ -27,34 +27,12 @@ export default function NewArticle() {
   const [searchText, setSearchText] = useState("");
   const [uploading, setUploading] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const toastBC = useRef(null);
 
   useEffect(() => {
     setIsAuthUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchTags();
   }, [setIsAuthUser]);
-
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image", "video"],
-    ],
-  };
-
-  const formats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "list",
-    "bullet",
-    "indent",
-    "link",
-    "image",
-  ];
-
   const validateForm = () => {
     if (!title.trim()) {
       toastBC.current.show({
@@ -75,7 +53,7 @@ export default function NewArticle() {
     if (!featuredImage) {
       toastBC.current.show({
         severity: "error",
-        summary: "Please upload a featured image",
+        summary: "Profile updated successfully!",
         sticky: true,
       });
       return false;
@@ -118,60 +96,57 @@ export default function NewArticle() {
       reader.readAsDataURL(file);
     }
   };
-
   async function createArticle() {
     if (!validateForm()) return;
 
     try {
       setUploading(true);
 
-      const articleData = {
-        title,
-        content: editorValue,
-        authorId: isAuthUser.id,
-        tags: JSON.stringify(tags),
-        references,
-        authorName: isAuthUser.firstname,
-        articleType: "admin",
-      };
-
-      const articleResponse = await fetch(
-        "https://agya-new-main-umye.vercel.app/api/articles",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(articleData),
-        }
-      );
-
-      if (!articleResponse.ok) {
-        throw new Error("Failed to create article");
-      }
-
-      const newArticle = await articleResponse.json();
-
       if (featuredImage) {
         const formData = new FormData();
         formData.append("file", featuredImage);
 
-        const imageResponse = await fetch(
-          `https://agya-new-main-umye.vercel.app/api/uploads/articles/${newArticle._id}`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
+        const response = await axios.post(`https://agyademo.uber.space/upload`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
 
-        if (!imageResponse.ok) {
-          throw new Error("Failed to upload image");
+        if (response) {
+          const articleData = {
+            title,
+            content: editorValue,
+            authorId: isAuthUser.id,
+            tags: JSON.stringify(tags),
+            featuredImage: `https://agyademo.uber.space/files/${response.data.link}`,
+            references,
+            authorName: isAuthUser.firstname,
+          };
+  
+          const articleResponse = await fetch(
+            "https://agyademo.uber.space/api/articles",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: articleData,
+            }
+          );
+  
+          if (!articleResponse.ok) {
+            throw new Error("Failed to create article");
+          }
+  
+          const newArticle = await articleResponse.json();
+          if (newArticle) {
+            toastBC.current.show({
+              severity: "success",
+              summary: "Article published successfully!",
+              sticky: true,
+            });
+          }
         }
       }
-      toastBC.current.show({
-        severity: "success",
-        summary: "Article published successfully!",
-        sticky: true,
-      });
+      // navigate("/");
     } catch (error) {
+      console.error("Error:", error);
       toastBC.current.show({
         severity: "error",
         summary: error.message || "Failed to publish article",
@@ -184,15 +159,12 @@ export default function NewArticle() {
 
   async function fetchTags() {
     try {
-      const response = await fetch(
-        "https://agya-new-main-umye.vercel.app/api/tags/all",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch("https://agyademo.uber.space/api/tags/all", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         const error = await response.json();
@@ -200,7 +172,7 @@ export default function NewArticle() {
       }
 
       const tags = await response.json();
-      setAdminTags(tags.data);
+      setAdminTags(tags);
       console.log("Fetched tags successfully:", tags);
       return tags;
     } catch (error) {
@@ -217,13 +189,10 @@ export default function NewArticle() {
   const handleRemoveTag = (tag) => {
     setTags((prevTags) => prevTags.filter((t) => t !== tag));
   };
-  console.log(adminTags);
-  const filteredAdminTags =
-    adminTags === undefined
-      ? null
-      : adminTags.filter((tag) =>
-          tag.name.toLowerCase().includes(searchText.toLowerCase())
-        );
+
+  const filteredAdminTags = adminTags.filter((tag) =>
+    tag.name.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   return (
     <div className="p-4 sm:px-12 lg:px-24">
@@ -239,15 +208,7 @@ export default function NewArticle() {
             className="w-full mb-4 p-2 border border-gray-300 rounded-md"
           />
           <h3 className="font-semibold my-5">Description</h3>
-          <ReactQuill
-            theme="snow"
-            value={editorValue}
-            onChange={setEditorValue}
-            modules={modules}
-            formats={formats}
-            placeholder="write something ..."
-          />
-
+          <RichTextWithTranslate onEditorChange={setEditorValue}/>
           <h3 className="font-semibold my-5">Featured Image</h3>
           <div className="flex flex-col items-center mb-6">
             <div className="relative">
@@ -315,13 +276,13 @@ export default function NewArticle() {
                 <div className="w-full relative">
                   <input
                     type="text"
-                    className="mb-5 h-[35px] border py-[2px] px-[5px] border-[#e6e6d7] w-full"
+                    className="mb-5 h-[35px] rounded-lg border py-[2px] px-[5px] border-[#e6e6d7] w-full"
                     placeholder="Sources, bibliography, links, book titles"
                     value={newReference}
                     onChange={(e) => setNewReference(e.target.value)}
                   />
                   <IoMdAdd
-                    className="absolute right-0 bg-main text-white w-[25px] h-[25px] rounded-[5px] top-[6px] py-[2px] px-[8px] cursor-pointer"
+                    className="absolute right-2 bg-main text-white w-[25px] h-[25px] rounded-[5px] top-[6px] py-[2px] px-[8px] cursor-pointer"
                     onClick={() => {
                       if (newReference.trim()) {
                         setReferences([...references, newReference]);

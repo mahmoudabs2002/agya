@@ -11,15 +11,14 @@ export default function Articles() {
 
   useEffect(() => {
     try {
-      fetch(
-        "https://agya-new-main-umye.vercel.app/api/articles/articles",
-        {}
-      ).then((response) => {
-        response.json().then((data) => {
-          setArticlesCount(data.numberOfArticles);
-          setArticlesData(data.data);
-        });
-      });
+      fetch("https://agyademo.uber.space/api/articles/articles", {}).then(
+        (response) => {
+          response.json().then((data) => {
+            setArticlesCount(data.numberOfArticles);
+            setArticlesData(data.data);
+          });
+        }
+      );
     } catch (e) {
       console.log(e);
     }
@@ -28,7 +27,7 @@ export default function Articles() {
   useEffect(() => {
     try {
       fetch(
-        "https://agya-new-main-umye.vercel.app/api/FeaturedArticles/all-featured",
+        "https://agyademo.uber.space/api/FeaturedArticles/all-featured",
         {}
       ).then((response) => {
         response.json().then((data) => {
@@ -51,8 +50,8 @@ export default function Articles() {
           </h1>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {featuredArticlesData === undefined ? (
-              <div>Loading</div>
+            {featuredArticlesData === undefined || featuredArticlesData.length === 0 ? (
+              <div className=" block text-center text-xl font-bold">No featured</div>
             ) : (
               featuredArticlesData.map((article, index) => (
                 <div
@@ -90,11 +89,12 @@ export default function Articles() {
               All Articles
             </h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {articlesData.map((article, index) => (
+              {articlesData === undefined || articlesData.length === 0 ? 
+              <div className=" block font-bold text-xl "> No articles </div> :
+              articlesData.map((article, index) => (
                 <div
                   key={index}
                   className="group overflow-hidden rounded-lg min-h-72 h-72 max-h-72 border border-main bg-white shadow transition-transform hover:-translate-y-1 flex flex-col"
-                  onClick={() => navigate(`/article/${article._id}/edit`)}
                 >
                   <div className="overflow-hidden">
                     <img

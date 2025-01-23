@@ -20,21 +20,20 @@ export default function Admins() {
 
   useEffect(() => {
     try {
-      fetch(
-        "https://agya-new-main-umye.vercel.app/api/auth//all-admin",
-        {}
-      ).then((response) => {
-        response.json().then((data) => {
-          setAdminsData(data.data);
-        });
-      });
+      fetch("https://agyademo.uber.space/api/auth/all-admin", {}).then(
+        (response) => {
+          response.json().then((data) => {
+            setAdminsData(data.data);
+          });
+        }
+      );
     } catch (e) {
       console.log(e);
     }
   }, []);
   const deleteAdmin = async (id) => {
     const data = await fetch(
-      `https://agya-new-main-umye.vercel.app/api/auth/delete-admin/${id}`,
+      `https://agyademo.uber.space/api/auth/delete-admin/${id}`,
       {
         method: "DELETE",
         headers: {

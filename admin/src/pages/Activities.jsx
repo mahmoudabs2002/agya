@@ -4,7 +4,7 @@ import Sidebar from "../components/sidebar";
 import { useNavigate } from "react-router-dom";
 import { Globe, User } from "lucide-react";
 import { Tickets } from "lucide-react";
-import { Clock9 } from "lucide-react";
+import { Clock9, Check } from "lucide-react";
 import { Ban } from "lucide-react";
 import { format } from "date-fns";
 
@@ -17,7 +17,7 @@ export default function Activities() {
   useEffect(() => {
     try {
       fetch(
-        "https://agya-new-main-umye.vercel.app/api/activities/activities",
+        "https://agyademo.uber.space/api/activities/activ/activite",
         {}
       ).then((response) => {
         response.json().then((data) => {
@@ -32,7 +32,7 @@ export default function Activities() {
   useEffect(() => {
     try {
       fetch(
-        `https://agya-new-main-umye.vercel.app/api/activities/activities/${type}`,
+        `https://agyademo.uber.space/api/activities/activities/${type}`,
         {}
       ).then((response) => {
         response.json().then((data) => {
@@ -104,9 +104,9 @@ export default function Activities() {
               Conferences & Talks
             </button>
             <button
-              onClick={() => setType("Events")}
+              onClick={() => setType("Event")}
               className={` rounded-xl duration-300 ${
-                type === "Events"
+                type === "Event"
                   ? "bg-main text-white"
                   : "bg-secondary text-black"
               }  py-3 w-32 text-[13px]`}
@@ -196,17 +196,25 @@ export default function Activities() {
                         Details
                       </button>
                       <div className=" -translate-y-52 translate-x-[450px] text-white top-4 -right-44 flex items-center gap-1">
-                        {activity.status === "pending" ? (
-                          ""
+                        {activity.status === "pending" ||
+                        activity.status === "Pending" ? (
+                          <>
+                            <Clock9
+                              fillOpacity={20}
+                              className="text-yellow-600"
+                            />
+                            <p className=" text-yellow-600 text-lg">Pending</p>
+                          </>
                         ) : activity.status === "rejected" ? (
                           <>
                             <Ban fillOpacity={20} className="text-[#F10F0F]" />
                             <p className=" text-[#F10F0F] text-lg">Rejected</p>
                           </>
-                        ) : activity.status === "passed" ? (
+                        ) : activity.status === "passed" ||
+                          activity.status === "Passed" ? (
                           <>
-                            <Clock9 fill="#005f6a" fillOpacity={20} />{" "}
-                            <p className=" text-main text-lg">Passed</p>
+                            <Check fill="#16a34a" fillOpacity={20} />{" "}
+                            <p className=" text-green-600 text-lg">Approved</p>
                           </>
                         ) : null}
                       </div>
@@ -275,17 +283,25 @@ export default function Activities() {
                       Details
                     </button>
                     <div className=" -translate-y-52 translate-x-[450px] text-white flex items-center gap-1">
-                      {activity.status === "pending" ? (
-                        ""
+                      {activity.status === "pending" ||
+                      activity.status === "Pending" ? (
+                        <>
+                          <Clock9
+                            fillOpacity={20}
+                            className="text-yellow-600"
+                          />
+                          <p className=" text-yellow-600 text-lg">Pending</p>
+                        </>
                       ) : activity.status === "rejected" ? (
                         <>
                           <Ban fillOpacity={20} className="text-[#F10F0F]" />{" "}
                           <p className=" text-[#F10F0F] text-lg">Rejected</p>
                         </>
-                      ) : activity.status === "passed" ? (
+                      ) : activity.status === "passed" ||
+                        activity.status === "Passed" ? (
                         <>
-                          <Clock9 fill="#005f6a" fillOpacity={20} />{" "}
-                          <p className=" text-main text-lg">Passed</p>
+                          <Check fill="#16a34a" fillOpacity={20} />{" "}
+                          <p className=" text-green-600 text-lg">Approved</p>
                         </>
                       ) : null}
                     </div>

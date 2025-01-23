@@ -19,7 +19,7 @@ export default function PendingActivities() {
   useEffect(() => {
     try {
       fetch(
-        "https://agya-new-main-umye.vercel.app/api/activities/padding-activities",
+        "https://agyademo.uber.space/api/activities/activ/padding-activities",
         {}
       ).then((response) => {
         response.json().then((data) => {
@@ -34,7 +34,7 @@ export default function PendingActivities() {
   useEffect(() => {
     try {
       fetch(
-        `https://agya-new-main-umye.vercel.app/api/activities/padding-activities/${type}`,
+        `https://agyademo.uber.space/api/activities/padding-activities/${type}`,
         {}
       ).then((response) => {
         response.json().then((data) => {
@@ -103,9 +103,9 @@ export default function PendingActivities() {
             Conferences & Talks
           </button>
           <button
-            onClick={() => setType("Events")}
+            onClick={() => setType("Event")}
             className={` rounded-xl duration-300 ${
-              type === "Events"
+              type === "Event"
                 ? "bg-main text-white"
                 : "bg-secondary text-black"
             }  py-3 w-32 text-[13px]`}
@@ -133,8 +133,11 @@ export default function PendingActivities() {
             Competitions
           </button>
         </div>
-        {type === ""
-          ? activityData.map((item) => {
+        {type === "" ? (
+          activityData === undefined ? (
+            <div>No activitys</div>
+          ) : (
+            activityData.map((item) => {
               return (
                 <div
                   key={item._id}
@@ -202,73 +205,78 @@ export default function PendingActivities() {
                 </div>
               );
             })
-          : activityDataType.map((item) => {
-              return (
-                <div
-                  key={item._id}
-                  onClick={() =>
-                    navigate(`/activities/pending-activities/${item._id}`)
-                  }
-                  className="border border-[#2F150599] my-4 rounded-lg flex bg-[#C5AD891A] shadow-md overflow-hidden w-full"
-                >
-                  <div className="relative">
-                    <img
-                      src={item.featuredImage}
-                      alt="image"
-                      className="w-[280px] bg-left h-[222px] object-cover "
-                    />
+          )
+        ) : activityDataType === undefined ? (
+          <div> no activity</div>
+        ) : (
+          activityDataType.map((item) => {
+            return (
+              <div
+                key={item._id}
+                onClick={() =>
+                  navigate(`/activities/pending-activities/${item._id}`)
+                }
+                className="border border-[#2F150599] my-4 rounded-lg flex bg-[#C5AD891A] shadow-md overflow-hidden w-full"
+              >
+                <div className="relative">
+                  <img
+                    src={item.featuredImage}
+                    alt="image"
+                    className="w-[280px] bg-left h-[222px] object-cover "
+                  />
+                </div>
+                <div className="p-4 relative">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {item?.activityName}
+                  </h3>
+                  <div className="flex items-center text-sm text-gray-500 space-x-2 my-2">
+                    <span>
+                      {format(item?.date, "P")} | {item?.time}
+                    </span>
                   </div>
-                  <div className="p-4 relative">
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {item?.activityName}
-                    </h3>
-                    <div className="flex items-center text-sm text-gray-500 space-x-2 my-2">
-                      <span>
-                        {format(item?.date, "P")} | {item?.time}
-                      </span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-500 space-x-2 mb-2">
-                      <Globe className="w-4 h-4 text-main size-20" />
-                      <span>{item.location}</span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-500 space-x-2 mb-2">
-                      <Tickets className="w-4 h-4 text-main" />
-                      <span>{item.price}</span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-500 space-x-2">
-                      <User className="w-4 h-4 text-main" />
-                      <span>{item.appliedNumber}</span>
-                    </div>
-                    <div className="flex mt-2 items-center text-sm text-gray-500 space-x-2">
-                      {item?.sponsors === undefined ||
-                      item.sponsors.length === 0 ? (
-                        <div> no sponsors</div>
-                      ) : (
-                        item?.sponsors.map((spons) => {
-                          return (
-                            <img
-                              key={spons?.name}
-                              src={spons?.logo}
-                              alt=""
-                              className="w-10"
-                            />
-                          );
-                        })
-                      )}
-                    </div>
-                    <div
-                      onClick={() =>
-                        navigate("/activities/pending-activities/:id")
-                      }
-                      className=" cursor-pointer translate-x-[450px] w-fit py-2 px-8 rounded-xl -right-32 bg-main text-white"
-                    >
-                      {" "}
-                      Details
-                    </div>
+                  <div className="flex items-center text-sm text-gray-500 space-x-2 mb-2">
+                    <Globe className="w-4 h-4 text-main size-20" />
+                    <span>{item.location}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-500 space-x-2 mb-2">
+                    <Tickets className="w-4 h-4 text-main" />
+                    <span>{item.price}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-500 space-x-2">
+                    <User className="w-4 h-4 text-main" />
+                    <span>{item.appliedNumber}</span>
+                  </div>
+                  <div className="flex mt-2 items-center text-sm text-gray-500 space-x-2">
+                    {item?.sponsors === undefined ||
+                    item.sponsors.length === 0 ? (
+                      <div> no sponsors</div>
+                    ) : (
+                      item?.sponsors.map((spons) => {
+                        return (
+                          <img
+                            key={spons?.name}
+                            src={spons?.logo}
+                            alt=""
+                            className="w-10"
+                          />
+                        );
+                      })
+                    )}
+                  </div>
+                  <div
+                    onClick={() =>
+                      navigate("/activities/pending-activities/:id")
+                    }
+                    className=" cursor-pointer translate-x-[450px] w-fit py-2 px-8 rounded-xl -right-32 bg-main text-white"
+                  >
+                    {" "}
+                    Details
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

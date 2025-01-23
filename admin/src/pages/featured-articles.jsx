@@ -19,14 +19,13 @@ export default function FeaturedArticles() {
   //   const navigate = useNavigate();
   useEffect(() => {
     try {
-      fetch(
-        "https://agya-new-main-umye.vercel.app/api/articles/articles",
-        {}
-      ).then((response) => {
-        response.json().then((data) => {
-          setArticlesData(data.data);
-        });
-      });
+      fetch("https://agyademo.uber.space/api/articles/articles", {}).then(
+        (response) => {
+          response.json().then((data) => {
+            setArticlesData(data.data);
+          });
+        }
+      );
     } catch (e) {
       console.log(e);
     }
@@ -53,7 +52,7 @@ export default function FeaturedArticles() {
       return false;
     }
     const response = await fetch(
-      "https://agya-new-main-umye.vercel.app/api/FeaturedArticles/update-featured",
+      "https://agyademo.uber.space/api/FeaturedArticles/update-featured",
       {
         method: "PUT",
         headers: {
@@ -110,9 +109,9 @@ export default function FeaturedArticles() {
                 key={index}
                 className={`${
                   findElement(select, select.length, article._id) === -1
-                    ? ""
-                    : "bg-black/60"
-                } cursor-pointer group overflow-hidden rounded-lg border min-h-72 h-72 max-h-72 border-main bg-white shadow transition-transform hover:-translate-y-1 flex flex-col`}
+                    ? "border"
+                    : "border-2"
+                } cursor-pointer group overflow-hidden rounded-lg  min-h-72 h-72 max-h-72 border-main bg-white shadow transition-transform hover:-translate-y-1 flex flex-col`}
                 onClick={() => {
                   if (select.length <= 2) {
                     if (select.includes(article._id)) {

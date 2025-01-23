@@ -8,14 +8,13 @@ export default function Messages() {
   const [message, setMessage] = useState([]);
   useEffect(() => {
     try {
-      fetch(
-        "https://agya-new-main-umye.vercel.app/api/message/all-messages",
-        {}
-      ).then((response) => {
-        response.json().then((data) => {
-          setMessage(data.data);
-        });
-      });
+      fetch("https://agyademo.uber.space/api/messages/all-messages", {}).then(
+        (response) => {
+          response.json().then((data) => {
+            setMessage(data.data);
+          });
+        }
+      );
     } catch (e) {
       console.log(e);
     }

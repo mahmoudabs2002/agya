@@ -41,16 +41,13 @@ export default function Navbar() {
         content: postText,
         authorName: isAuthUser.firstname,
       };
-      const response = await fetch(
-        `https://agya-new-main-umye.vercel.app/api/post/posts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(postBody),
-        }
-      );
+      const response = await fetch(`https://agyademo.uber.space/api/posts/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postBody),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to create a new post");

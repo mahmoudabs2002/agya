@@ -16,7 +16,7 @@ export default function ActiviteDetails() {
   useEffect(() => {
     try {
       fetch(
-        `https://agya-new-main-umye.vercel.app/api/activities/activitiy/${id}`,
+        `https://agyademo.uber.space/api/activities/activitiy/${id}`,
         {}
       ).then((response) => {
         response.json().then((data) => {

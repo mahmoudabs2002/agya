@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Calendar } from "primereact/calendar";
 import { IoTrashBinOutline } from "react-icons/io5";
 import { Edit3 } from "lucide-react";
+import { Toast } from "primereact/toast";
+import axios from "axios"; // Import your configured axios instance
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { GlobalContext } from "../context/GlobelContext";
-import { Toast } from "primereact/toast";
 const AddActivity = () => {
   const navigate = useNavigate();
   const toastBC = useRef(null);
@@ -29,6 +30,7 @@ const AddActivity = () => {
     externalLink: "",
     callToAction: "",
   });
+  const sponsorUrls = [];
   const [featuredImage, setFeaturedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   useEffect(() => {
@@ -117,34 +119,6 @@ const AddActivity = () => {
     }
     return true;
   };
-  const uploadSponsorImages = async (activityId) => {
-    const sponsorUrls = [];
-    for (const sponsorImage of sponsorImages) {
-      const formData = new FormData();
-      formData.append("file", sponsorImage);
-      try {
-        const response = await fetch(
-          `https://agya-new-main-umye.vercel.app/api/uploads/activities/${activityId}/sponsors`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to upload sponsor image");
-        }
-        const data = await response.json();
-        sponsorUrls.push(data.imageUrl);
-      } catch (error) {
-        toastBC.current.show({
-          severity: "error",
-          summary: `Failed to upload sponsor image: ${sponsorImage.name}`,
-          sticky: true,
-        });
-      }
-    }
-    return sponsorUrls;
-  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isAuthUser) {
@@ -159,7 +133,42 @@ const AddActivity = () => {
     }
     try {
       setUploading(true);
-      const formattedDate =
+      if (featuredImage) {
+        const featuredFormData = new FormData();
+        featuredFormData.append("file", featuredImage);
+        const featuredResponse = await axios.post(
+          `https://agyademo.uber.space/upload`,
+          featuredFormData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          },
+        );
+        if (featuredResponse) {
+
+          for (const sponsorImage of sponsorImages) {
+            const formData = new FormData();
+            formData.append("file", sponsorImage);
+            try {
+              const response = await axios.post(
+                `https://agyademo.uber.space/upload`,
+                formData,
+                {
+                  headers: { "Content-Type": "multipart/form-data" },
+                },
+              );
+              if (response) {
+                sponsorUrls.push(`https://agyademo.uber.space/files/${response.data.link}`);
+              }
+            } catch (error) {
+              toastBC.current.show({
+                severity: "error",
+                summary: `Failed to upload sponsor image: ${sponsorImage.name}`,
+                sticky: true,
+              });
+            }
+          }
+        }
+        const formattedDate =
         formData.date instanceof Date
           ? formData.date.toISOString().split("T")[0]
           : formData.date;
@@ -173,7 +182,9 @@ const AddActivity = () => {
         activityType: formData.type,
         date: formattedDate,
         time: formattedTime,
+        featuredImage:`https://agyademo.uber.space/files/${featuredResponse.data.link}`,
         organization: formData.institution,
+        sponsors : sponsorUrls,
         location:
           formData.location === "offline"
             ? formData.locationDetails
@@ -186,55 +197,27 @@ const AddActivity = () => {
         status: "pending",
       };
       const activityResponse = await fetch(
-        "https://agya-new-main-umye.vercel.app/api/activities",
+        "https://agyademo.uber.space/api/activities",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(activityData),
         }
       );
-      if (!activityResponse.ok) {
-        const error = await activityResponse.json();
-        throw new Error(error.message || "Failed to create activity");
+      if (activityResponse) {
+        toastBC.current.show({
+          severity: "success",
+          summary:"Activity created successfully!",
+          sticky: true,
+        });
       }
-      const newActivity = await activityResponse.json();
-      if (featuredImage) {
-        const featuredFormData = new FormData();
-        featuredFormData.append("file", featuredImage);
-        const featuredResponse = await fetch(
-          `https://agya-new-main-umye.vercel.app/api/uploads/activities/${newActivity._id}`,
-          {
-            method: "POST",
-            body: featuredFormData,
-          }
-        );
-        if (!featuredResponse.ok) {
-          throw new Error("Failed to upload featured image");
-        }
+      // const newActivity = await activityResponse.json();
       }
-      if (sponsorImages.length > 0) {
-        const sponsorUrls = await uploadSponsorImages(newActivity._id);
-        if (sponsorUrls.length > 0) {
-          await fetch(
-            `https://agya-new-main-umye.vercel.app/api/activities/${newActivity._id}`,
-            {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ sponsors: sponsorUrls }),
-            }
-          );
-        }
-      }
-      toastBC.current.show({
-        severity: "success",
-        summary: "Activity created successfully!",
-        sticky: true,
-      });
       // navigate("/profile");
     } catch (error) {
       toastBC.current.show({
-        severity: "error",
-        summary: error.message || "Failed to create activity",
+        severity: "success",
+        summary:error.message || "Failed to create activity",
         sticky: true,
       });
     } finally {
@@ -408,7 +391,7 @@ const AddActivity = () => {
             <div>
               <h3 className="font-semibold mb-4">Sponsor Images</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {sponsorPreviews.map((preview, index) => (
+                {sponsorPreviews === undefined || sponsorPreviews.length === 0 ? <div> no sponsor</div> : sponsorPreviews.map((preview, index) => (
                   <div key={index} className="relative">
                     <img
                       src={preview}

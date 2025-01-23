@@ -22,7 +22,7 @@ export default function PendingActivitiesDetails() {
   useEffect(() => {
     try {
       fetch(
-        `https://agya-new-main-umye.vercel.app/api/activities/activitiy/${id}`,
+        `https://agyademo.uber.space/api/activities/activitiy/${id}`,
         {}
       ).then((response) => {
         response.json().then((data) => {
@@ -38,7 +38,7 @@ export default function PendingActivitiesDetails() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `https://agya-new-main-umye.vercel.app/api/activities/activities-updata/${id}`,
+      `https://agyademo.uber.space/api/activities/activities-updata/${id}`,
       {
         method: "PUT",
         headers: {
@@ -51,16 +51,37 @@ export default function PendingActivitiesDetails() {
     );
     const finalData = await response.json();
     if (finalData.success) {
-      setConfirm("warn");
-      setIsOpen(false);
-      toastBC.current.show({
-        severity: "success",
-        summary: "the activity has approved",
-        sticky: true,
-      });
-      setTimeout(() => {
-        window.location.href = "/activities";
-      }, 1000);
+      const response = await fetch(
+        `https://agyademo.uber.space/api/notifications/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: activityData._id,
+            content: `Great news! Your event, ${activityData?.activityName}, has been approved and is now live on our platform.
+            We're excited to see how your event unfolds. Thank you for helping spread knowledge and preserve our heritage.`,
+            category: "Activity Approved",
+          }),
+        }
+      );
+      const finalData = await response.json();
+      if (finalData.success) {
+        toastBC.current.show({
+          severity: "success",
+          summary: " report has updated succesfully",
+          sticky: true,
+        });
+        setIsOpen(false);
+        setConfirm("warn");
+      } else {
+        toastBC.current.show({
+          severity: "success",
+          summary: " report has updated succesfully",
+          sticky: true,
+        });
+      }
     } else {
       toastBC.current.show({
         severity: "error",
@@ -73,7 +94,7 @@ export default function PendingActivitiesDetails() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `https://agya-new-main-umye.vercel.app/api/activities/activities-updata/${id}`,
+      `https://agyademo.uber.space/api/activities/activities-updata/${id}`,
       {
         method: "PUT",
         headers: {

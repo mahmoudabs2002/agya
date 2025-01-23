@@ -22,7 +22,7 @@ export default function ReportDetailsComment() {
   useEffect(() => {
     try {
       fetch(
-        `https://agya-new-main-umye.vercel.app/api/comment/comments/${id}`,
+        `https://agyademo.uber.space/api/comments/comments/admin/${id}`,
         {}
       ).then((response) => {
         response.json().then((data) => {
@@ -38,7 +38,7 @@ export default function ReportDetailsComment() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
+      `https://agyademo.uber.space/api/reports/reports/${idItem}/read`,
       {
         method: "PUT",
         headers: {
@@ -69,7 +69,7 @@ export default function ReportDetailsComment() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `https://agya-new-main-umye.vercel.app/api/auth/update-user/${commentData?.userId._id}`,
+      `https://agyademo.uber.space/api/auth/update-user/${commentData?.user.userId._id}`,
       {
         method: "PATCH",
         headers: {
@@ -83,14 +83,14 @@ export default function ReportDetailsComment() {
     const finalData = await response.json();
     if (finalData.success) {
       const response = await fetch(
-        `https://agya-new-main-umye.vercel.app/api/notification/notifications`,
+        `https://agyademo.uber.space/api/notifications/`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userId: commentData?.userId._id,
+            userId: commentData?.user.userId._id,
             content: "ban",
             category: "ban",
           }),
@@ -111,7 +111,7 @@ export default function ReportDetailsComment() {
           sticky: true,
         });
         const response = await fetch(
-          `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
+          `https://agyademo.uber.space/api/reports/reports/${idItem}/read`,
           {
             method: "PUT",
             headers: {
@@ -128,7 +128,7 @@ export default function ReportDetailsComment() {
     // setPageLevelLoader(true);
     e.preventDefault();
     const response = await fetch(
-      `https://agya-new-main-umye.vercel.app/api/auth/update-user/${commentData?.user.userId._id}`,
+      `https://agyademo.uber.space/api/auth/update-user/${commentData?.user.userId._id}`,
       {
         method: "PATCH",
         headers: {
@@ -142,7 +142,7 @@ export default function ReportDetailsComment() {
     const finalData = await response.json();
     if (finalData) {
       const response = await fetch(
-        `https://agya-new-main-umye.vercel.app/api/notification/notifications`,
+        `https://agyademo.uber.space/api/notifications/`,
         {
           method: "POST",
           headers: {
@@ -171,7 +171,7 @@ export default function ReportDetailsComment() {
           sticky: true,
         });
         const response = await fetch(
-          `https://agya-new-main-umye.vercel.app/api/reports/reports/${idItem}/read`,
+          `https://agyademo.uber.space/api/reports/reports/${idItem}/read`,
           {
             method: "PUT",
             headers: {

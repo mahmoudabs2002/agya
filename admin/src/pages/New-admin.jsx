@@ -23,7 +23,7 @@ export default function NewAdmin() {
     imageData.set("email", formData.email);
 
     const response = await fetch(
-      "https://agya-new-main-umye.vercel.app/api/auth/add-admin",
+      "https://agyademo.uber.space/api/auth/add-admin",
       {
         method: "POST",
         headers: {
