@@ -70,18 +70,18 @@ export default function FeaturedArticles() {
         summary: "add featured succesfully",
         sticky: true,
       });
-      setTimeout(() => {
-        window.location.href = "/article";
-      }, 500);
+      // setTimeout(() => {
+      //   window.location.href = "/article";
+      // }, 500);
     } else {
       toastBC.current.show({
         severity: "success",
         summary: "add featured succesfully",
         sticky: true,
       });
-      setTimeout(() => {
-        window.location.href = "/article";
-      }, 500);
+      // setTimeout(() => {
+      //   window.location.href = "/article";
+      // }, 500);
     }
   };
 
@@ -89,7 +89,7 @@ export default function FeaturedArticles() {
     <div className=" flex justify-between">
       <Sidebar />
 
-      <div className="flex-1 mx-[100px] py-8">
+      <div className="flex-1 ml-80 mx-[100px] py-8">
         <Navbar />
         <form onSubmit={update} className=" w-full  px-3 py-8">
           <div className="  flex justify-between mb-4">
@@ -123,7 +123,8 @@ export default function FeaturedArticles() {
               >
                 <div className="overflow-hidden">
                   <img
-                    src={article.image}
+                    src={article.featuredImage
+                    }
                     alt={article.title}
                     className=" w-full transition-transform duration-300 group-hover:scale-105"
                   />

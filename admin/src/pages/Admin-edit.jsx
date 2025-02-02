@@ -129,7 +129,7 @@ export default function AdminEdit() {
     <div className=" flex justify-between">
       <Sidebar />
 
-      <div className="flex-1 mx-[100px] py-8">
+      <div className="flex-1 ml-80 mx-[100px] py-8">
         <div className=" w-full  px-3 py-8">
           <div>
             <span className=" pb-1 text-[#777]  border-b border-[#777]">

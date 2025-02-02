@@ -254,7 +254,7 @@ export default function ReportDetailsPost() {
       ) : null}
       <div className=" flex justify-between">
         <Sidebar />
-        <div className="flex-1 mx-[100px] py-8">
+        <div className="flex-1 ml-80 mx-[100px] py-8">
           <div>
             <div className=" text-center">
               <h3>

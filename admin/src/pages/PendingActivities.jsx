@@ -49,7 +49,7 @@ export default function PendingActivities() {
   return (
     <div className=" flex justify-between">
       <Sidebar />
-      <div className="flex-1 mx-[100px] py-8">
+      <div className="flex-1 ml-80 mx-[100px] py-8">
         <Navbar />
         <div>
           <span className=" pb-1 text-[#777]  border-b border-[#777]">
@@ -150,7 +150,7 @@ export default function PendingActivities() {
                     <img
                       src={item.featuredImage}
                       alt="image"
-                      className="w-[280px] bg-left h-[222px] object-cover "
+                      className="w-[280px] bg-left object-cover min-h-[300px]"
                     />
                   </div>
                   <div className="p-4 relative">
@@ -222,7 +222,7 @@ export default function PendingActivities() {
                   <img
                     src={item.featuredImage}
                     alt="image"
-                    className="w-[280px] bg-left h-[222px] object-cover "
+                    className="w-[280px] bg-left object-cover min-h-[300px]"
                   />
                 </div>
                 <div className="p-4 relative">

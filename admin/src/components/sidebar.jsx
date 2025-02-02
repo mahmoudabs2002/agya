@@ -45,7 +45,7 @@ const Sidebar = () => {
   const updatename = isAuthUser?.user?.firstname;
 
   return (
-    <div className="flex flex-col max-h-fit max-w-64 min-w-64 text-main-font rounded-lg border border-gray-300 bg-[#C5AD891A] shadow">
+    <div className=" fixed flex flex-col max-h-fit max-w-64 min-w-64 text-main-font rounded-lg border border-gray-300 bg-[#C5AD891A] shadow">
       {/* Profile Section */}
       <div className="flex flex-col items-center py-8">
         <img src="/Logo.png" alt="" className=" w-36 mb-4" />

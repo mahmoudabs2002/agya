@@ -107,16 +107,36 @@ export default function PendingActivitiesDetails() {
     );
     const finalData = await response.json();
     if (finalData.success) {
-      setConfirm("ban");
-      setIsOpen(false);
-      toastBC.current.show({
-        severity: "success",
-        summary: "the activity has rejected",
-        sticky: true,
-      });
-      setTimeout(() => {
-        window.location.href = "/activities";
-      }, 1000);
+      const response = await fetch(
+        `https://agyademo.uber.space/api/notifications/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: activityData._id,
+            content: `Your event, ${activityData?.activityName}, has been rejected`,
+            category: "Activity Rejected",
+          }),
+        }
+      );
+      const finalData = await response.json();
+      if (finalData.success) {
+        toastBC.current.show({
+          severity: "success",
+          summary: " report has updated succesfully",
+          sticky: true,
+        });
+        setIsOpen(false);
+        setConfirm("warn");
+      } else {
+        toastBC.current.show({
+          severity: "success",
+          summary: " report has updated succesfully",
+          sticky: true,
+        });
+      }
     } else {
       toastBC.current.show({
         severity: "error",
@@ -192,7 +212,7 @@ export default function PendingActivitiesDetails() {
       ) : null}
       <div className=" flex justify-between">
         <Sidebar />
-        <div className="flex-1 mx-[100px] py-8">
+        <div className="flex-1 ml-80 mx-[100px] py-8">
           <div>
             <span className=" pb-1 text-[#777]  border-b border-[#777]">
               Activities

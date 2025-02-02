@@ -32,7 +32,7 @@ export default function Reports() {
   return (
     <div className=" flex justify-between">
       <Sidebar />
-      <div className="flex-1 mx-[100px] py-8">
+      <div className="flex-1 ml-80 mx-[100px] py-8">
         <Navbar />
         <div className=" my-4">
           <TableContainer component={Paper}>

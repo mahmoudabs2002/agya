@@ -47,7 +47,7 @@ export default function Activities() {
     <div className=" flex justify-between">
       <Sidebar />
 
-      <div className="flex-1 mx-[100px] py-8">
+      <div className="flex-1 ml-80 mx-[100px] py-8">
         <Navbar />
         <div className=" w-full py-8">
           <div className=" mb-8 flex justify-between items-center">
@@ -149,7 +149,7 @@ export default function Activities() {
                       <img
                         src={activity?.featuredImage}
                         alt="image"
-                        className="w-[280px] bg-left h-[222px] object-cover"
+                        className="w-[280px] bg-left object-cover min-h-[300px]"
                       />
                     </div>
                     <div className="p-4 relative">
@@ -182,7 +182,7 @@ export default function Activities() {
                             return (
                               <img
                                 key={spons?.name}
-                                src={spons?.logo}
+                                src={spons}
                                 alt=""
                                 className="w-10"
                               />
@@ -237,7 +237,7 @@ export default function Activities() {
                     <img
                       src={activity.featuredImage}
                       alt="image"
-                      className="w-[280px] bg-left h-[222px] object-cover "
+                      className="w-[280px] bg-left object-cover min-h-[300px]"
                     />
                   </div>
                   <div className="p-4 relative">

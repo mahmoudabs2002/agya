@@ -88,7 +88,7 @@ export default function Tages() {
     <div className=" flex justify-between">
       <Sidebar />
 
-      <div className="flex-1 mx-[100px] py-8">
+      <div className="flex-1 ml-80 mx-[100px] py-8">
         <Navbar />
         <div className=" w-full  px-3 py-8">
           <h1 className="mb-7 text-left font-bold text-3xl text-black">

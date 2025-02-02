@@ -42,7 +42,7 @@ export default function Articles() {
     <div className=" flex justify-between">
       <Sidebar />
 
-      <div className="flex-1 mx-[100px] py-8">
+      <div className="flex-1 ml-80 mx-[100px] py-8">
         <Navbar />
         <div className=" w-full  px-3 py-8">
           <h1 className="mb-7 text-left font-bold text-3xl text-black">
@@ -60,7 +60,7 @@ export default function Articles() {
                 >
                   <div className="overflow-hidden ">
                     <img
-                      src={article.image}
+                      src={article.featuredImage}
                       alt={article.title}
                       className=" w-full transition-transform duration-300 group-hover:scale-105"
                     />
@@ -98,7 +98,7 @@ export default function Articles() {
                 >
                   <div className="overflow-hidden">
                     <img
-                      src={article.image}
+                      src={article.featuredImage                      }
                       alt={article.title}
                       className=" w-full transition-transform duration-300 group-hover:scale-105"
                     />
@@ -108,7 +108,7 @@ export default function Articles() {
                     <h2 className="mb-1 text-base font-bold leading-tight text-gray-900">
                       {article.title}
                     </h2>
-                    <p className="text-gray-500 text-xs">{article.author}</p>
+                    <p className="text-gray-500 text-xs">{article.authorName}</p>
                   </div>
                 </div>
               ))}

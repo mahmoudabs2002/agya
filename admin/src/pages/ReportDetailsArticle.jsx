@@ -254,7 +254,7 @@ export default function ReportDetailsArticle() {
       ) : null}
       <div className=" flex justify-between">
         <Sidebar />
-        <div className="flex-1 mx-[100px] py-8">
+        <div className="flex-1 ml-80 mx-[100px] py-8">
           <div className="text-center ">
             <h3>
               <span className=" text-main text-xl font-bold">

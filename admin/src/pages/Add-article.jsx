@@ -1,5 +1,6 @@
 import { CiSearch } from "react-icons/ci";
 import { useState, useContext, useEffect, useRef } from "react";
+import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { FaFile } from "react-icons/fa";
 import { IoTrashBinOutline } from "react-icons/io5";
@@ -7,11 +8,10 @@ import { IoMdAdd } from "react-icons/io";
 import { Edit3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
-
-import Navbar from "../components/Navbar";
+import axios from "axios"
 import { GlobalContext } from "../context/GlobelContext";
-import axios from "axios"; // Import your configured axios instance
 import RichTextWithTranslate from "../components/richText";
+import Navbar from "../components/navbar";
 
 export default function NewArticle() {
   const navigate = useNavigate();
@@ -33,6 +33,29 @@ export default function NewArticle() {
     setIsAuthUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchTags();
   }, [setIsAuthUser]);
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image", "video"],
+    ],
+  };
+
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+  ];
+
   const validateForm = () => {
     if (!title.trim()) {
       toastBC.current.show({
@@ -96,6 +119,7 @@ export default function NewArticle() {
       reader.readAsDataURL(file);
     }
   };
+
   async function createArticle() {
     if (!validateForm()) return;
 
@@ -120,20 +144,20 @@ export default function NewArticle() {
             references,
             authorName: isAuthUser.firstname,
           };
-  
+
           const articleResponse = await fetch(
             "https://agyademo.uber.space/api/articles",
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: articleData,
+              body: JSON.stringify(articleData),
             }
           );
-  
+
           if (!articleResponse.ok) {
             throw new Error("Failed to create article");
           }
-  
+
           const newArticle = await articleResponse.json();
           if (newArticle) {
             toastBC.current.show({
@@ -142,9 +166,9 @@ export default function NewArticle() {
               sticky: true,
             });
           }
+          navigate("/article");
         }
       }
-      // navigate("/");
     } catch (error) {
       console.error("Error:", error);
       toastBC.current.show({
@@ -180,6 +204,15 @@ export default function NewArticle() {
     }
   }
 
+  const isValidURL = (url) => {
+    try {
+      const parsedURL = new URL(url);
+      return parsedURL.protocol === "http:" || parsedURL.protocol === "https:";
+    } catch (error) {
+      return false;
+    }
+  };
+
   const handleAddTag = (tag) => {
     if (!tags.includes(tag)) {
       setTags((prevTags) => [...prevTags, tag]);
@@ -205,15 +238,15 @@ export default function NewArticle() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Article Title"
-            className="w-full mb-4 p-2 border border-gray-300 rounded-md"
+            className="w-full mb-4 bg-white p-2 border border-gray-300 rounded-md"
           />
           <h3 className="font-semibold my-5">Description</h3>
-          <RichTextWithTranslate onEditorChange={setEditorValue}/>
+          <RichTextWithTranslate onEditorChange={setEditorValue} />
           <h3 className="font-semibold my-5">Featured Image</h3>
           <div className="flex flex-col items-center mb-6">
             <div className="relative">
               <img
-                src={imagePreview || "https://via.placeholder.com/400x200"}
+                src={imagePreview || "/png.png"}
                 alt="Featured"
                 className="w-[400px] h-[200px] object-cover rounded-lg"
               />
@@ -239,7 +272,7 @@ export default function NewArticle() {
               <CiSearch className="absolute top-[-9px] left-1 w-[25px]" />
               <input
                 type="text"
-                className="bg-[#e6e6d7] border-0 w-1/2 px-[40px] h-[30px] mb-[10px] rounded-[5px]"
+                className="bg-white border border-main/50 w-1/2 px-[40px] h-[30px] mb-[10px] rounded-[5px]"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 placeholder="Search tags"
@@ -276,18 +309,26 @@ export default function NewArticle() {
                 <div className="w-full relative">
                   <input
                     type="text"
-                    className="mb-5 h-[35px] rounded-lg border py-[2px] px-[5px] border-[#e6e6d7] w-full"
-                    placeholder="Sources, bibliography, links, book titles"
+                    className="mb-5 h-[35px] bg-white rounded-lg border py-[2px] px-[5px] border-[#e6e6d7] w-full"
+                    placeholder="Enter valid link (e.g., https://example.com)"
                     value={newReference}
                     onChange={(e) => setNewReference(e.target.value)}
                   />
                   <IoMdAdd
                     className="absolute right-2 bg-main text-white w-[25px] h-[25px] rounded-[5px] top-[6px] py-[2px] px-[8px] cursor-pointer"
                     onClick={() => {
-                      if (newReference.trim()) {
-                        setReferences([...references, newReference]);
-                        setNewReference("");
+                      if (!newReference.trim()) {
+                        alert("Reference cannot be empty");
+                        return;
                       }
+                      if (!isValidURL(newReference)) {
+                        alert(
+                          "Please enter a valid URL starting with http:// or https://"
+                        );
+                        return;
+                      }
+                      setReferences([...references, newReference]);
+                      setNewReference("");
                     }}
                   />
                 </div>
